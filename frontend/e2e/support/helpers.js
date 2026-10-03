@@ -48,7 +48,11 @@ export const money = (text) => Number(text.replace(/[^0-9.-]/g, ''))
 
 /** The value cell (last <h5>) of a cart totals row such as "Subtotal" or "Total". */
 export function cartTotalsRow(page, label) {
-  return page.locator('.cart_inner tr').filter({ has: page.locator('h5', { hasText: new RegExp(`^${label}$`) }) }).locator('h5').last()
+  return page
+    .locator('.cart_inner tr')
+    .filter({ has: page.locator('h5', { hasText: new RegExp(`^${label}$`) }) })
+    .locator('h5')
+    .last()
 }
 
 /** Fills the checkout billing form with valid data for `email`. */

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import NiceSelect from '../components/common/NiceSelect'
 import PageBanner from '../components/layout/PageBanner'
+import NiceSelect from '../components/ui/NiceSelect'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 import { useLightbox } from '../hooks/useLightbox'
 
@@ -36,7 +36,9 @@ function Toggle({ wrapper, id, children, ...input }) {
       <p>{children}</p>
       <div className={wrapper}>
         <input type="checkbox" id={id} {...input} />
-        <label htmlFor={id}></label>
+        <label htmlFor={id}>
+          <span className="sr-only">{children}</span>
+        </label>
       </div>
     </div>
   )
@@ -57,14 +59,16 @@ export default function Elements() {
         <div className="container">
           <h3 className="text-heading">Text Sample</h3>
           <p className="sample-text">
-            Every avid independent filmmaker has <b>Bold</b> about making that <i>Italic</i> interest documentary, or short film to show off
-            their creative prowess. Many have great ideas and want to “wow” the<sup>Superscript</sup> scene, or video renters with their big
-            project. But once you have the<sub>Subscript</sub> “in the can” (no easy feat), how do you move from a <del>Strike</del> through
-            of master DVDs with the <u>“Underline”</u> marked hand-written title inside a secondhand CD case, to a pile of cardboard boxes full
-            of shiny new, retail-ready DVDs, with UPC barcodes and polywrap sitting on your doorstep? You need to create eye-popping artwork
-            and have your project replicated. Using a reputable full service DVD Replication company like PacificDisc, Inc. to partner with is
-            certainly a helpful option to ensure a professional end result, but to help with your DVD replication project, here are 4 easy
-            steps to follow for good DVD replication results:
+            Every avid independent filmmaker has <b>Bold</b> about making that <i>Italic</i> interest documentary, or
+            short film to show off their creative prowess. Many have great ideas and want to “wow” the
+            <sup>Superscript</sup> scene, or video renters with their big project. But once you have the
+            <sub>Subscript</sub> “in the can” (no easy feat), how do you move from a <del>Strike</del> through of master
+            DVDs with the <u>“Underline”</u> marked hand-written title inside a secondhand CD case, to a pile of
+            cardboard boxes full of shiny new, retail-ready DVDs, with UPC barcodes and polywrap sitting on your
+            doorstep? You need to create eye-popping artwork and have your project replicated. Using a reputable full
+            service DVD Replication company like PacificDisc, Inc. to partner with is certainly a helpful option to
+            ensure a professional end result, but to help with your DVD replication project, here are 4 easy steps to
+            follow for good DVD replication results:
           </p>
         </div>
       </section>
@@ -77,7 +81,12 @@ export default function Elements() {
               {variants
                 .filter((v) => !(arrow && v === 'link'))
                 .map((v) => (
-                  <a key={v} href="#button" className={`genric-btn ${v}${modifier}`} onClick={(e) => e.preventDefault()}>
+                  <a
+                    key={v}
+                    href="#button"
+                    className={`genric-btn ${v}${modifier}`}
+                    onClick={(e) => e.preventDefault()}
+                  >
                     {label(v)}
                     {arrow && <span className="lnr lnr-arrow-right"></span>}
                   </a>
@@ -90,18 +99,38 @@ export default function Elements() {
             </div>
           ))}
           <div className="button-group-area mt-40">
-            <a href="#button" className="genric-btn primary e-large">Extra Large</a>
-            <a href="#button" className="genric-btn success large">Large</a>
-            <a href="#button" className="genric-btn primary">Default</a>
-            <a href="#button" className="genric-btn success medium">Medium</a>
-            <a href="#button" className="genric-btn primary small">Small</a>
+            <a href="#button" className="genric-btn primary e-large">
+              Extra Large
+            </a>
+            <a href="#button" className="genric-btn success large">
+              Large
+            </a>
+            <a href="#button" className="genric-btn primary">
+              Default
+            </a>
+            <a href="#button" className="genric-btn success medium">
+              Medium
+            </a>
+            <a href="#button" className="genric-btn primary small">
+              Small
+            </a>
           </div>
           <div className="button-group-area mt-10">
-            <a href="#button" className="genric-btn primary-border e-large">Extra Large</a>
-            <a href="#button" className="genric-btn success-border large">Large</a>
-            <a href="#button" className="genric-btn primary-border">Default</a>
-            <a href="#button" className="genric-btn success-border medium">Medium</a>
-            <a href="#button" className="genric-btn primary-border small">Small</a>
+            <a href="#button" className="genric-btn primary-border e-large">
+              Extra Large
+            </a>
+            <a href="#button" className="genric-btn success-border large">
+              Large
+            </a>
+            <a href="#button" className="genric-btn primary-border">
+              Default
+            </a>
+            <a href="#button" className="genric-btn success-border medium">
+              Medium
+            </a>
+            <a href="#button" className="genric-btn primary-border small">
+              Small
+            </a>
           </div>
         </div>
       </section>
@@ -124,10 +153,14 @@ export default function Elements() {
             <div className="row">
               <div className="col-md-9">
                 <p className="text-right">
-                  Over time, even the most sophisticated, memory packed computer can begin to run slow if we don’t do something to prevent it.
-                  The reason why has less to do with how computers are made and how they age and more to do with the way we use them.
+                  Over time, even the most sophisticated, memory packed computer can begin to run slow if we don’t do
+                  something to prevent it. The reason why has less to do with how computers are made and how they age
+                  and more to do with the way we use them.
                 </p>
-                <p className="text-right">Before we discuss all of the things that could be affecting your PC’s performance, let’s talk a little about what symptoms</p>
+                <p className="text-right">
+                  Before we discuss all of the things that could be affecting your PC’s performance, let’s talk a little
+                  about what symptoms
+                </p>
               </div>
               <div className="col-md-3">
                 <img src="/img/elements/d.jpg" alt="" className="img-fluid" />
@@ -175,7 +208,14 @@ export default function Elements() {
                     <div className="visit">645032</div>
                     <div className="percentage">
                       <div className="progress">
-                        <div className={`progress-bar color-${i + 1}`} role="progressbar" style={{ width: `${pct}%` }} aria-valuenow={pct} aria-valuemin="0" aria-valuemax="100"></div>
+                        <div
+                          className={`progress-bar color-${i + 1}`}
+                          role="progressbar"
+                          style={{ width: `${pct}%` }}
+                          aria-valuenow={pct}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -233,22 +273,34 @@ export default function Elements() {
               <div className="col-md-4 mt-sm-30">
                 <h3 className="mb-20">Ordered List</h3>
                 <ol className="ordered-list">
-                  <li><span>Fta Keys</span></li>
-                  <li><span>For Women Only Your Computer Usage</span></li>
+                  <li>
+                    <span>Fta Keys</span>
+                  </li>
+                  <li>
+                    <span>For Women Only Your Computer Usage</span>
+                  </li>
                   <li>
                     <span>Facts Why Inkjet Printing Is Very Appealing</span>
                     <ol className="ordered-list-alpha">
                       <li>
                         <span>Addiction When Gambling Becomes</span>
                         <ol className="ordered-list-roman">
-                          <li><span>Protective Preventative Maintenance</span></li>
+                          <li>
+                            <span>Protective Preventative Maintenance</span>
+                          </li>
                         </ol>
                       </li>
                     </ol>
                   </li>
-                  <li><span>Dealing With Technical Support 10 Useful Tips</span></li>
-                  <li><span>Make Myspace Your Best Designed Space</span></li>
-                  <li><span>Cleaning And Organizing Your Computer</span></li>
+                  <li>
+                    <span>Dealing With Technical Support 10 Useful Tips</span>
+                  </li>
+                  <li>
+                    <span>Make Myspace Your Best Designed Space</span>
+                  </li>
+                  <li>
+                    <span>Cleaning And Organizing Your Computer</span>
+                  </li>
                 </ol>
               </div>
             </div>
@@ -271,19 +323,33 @@ export default function Elements() {
                     <input type="email" name="EMAIL" placeholder="Email address" required className="single-input" />
                   </div>
                   <div className="input-group-icon mt-10">
-                    <div className="icon"><i className="fa fa-thumb-tack" aria-hidden="true"></i></div>
+                    <div className="icon">
+                      <i className="fa fa-thumb-tack" aria-hidden="true"></i>
+                    </div>
                     <input type="text" name="address" placeholder="Address" required className="single-input" />
                   </div>
                   <div className="input-group-icon mt-10">
-                    <div className="icon"><i className="fa fa-plane" aria-hidden="true"></i></div>
+                    <div className="icon">
+                      <i className="fa fa-plane" aria-hidden="true"></i>
+                    </div>
                     <div className="form-select">
-                      <NiceSelect value={city} onChange={setCity} options={toOptions(['City', 'Dhaka', 'Dilli', 'Newyork', 'Islamabad'])} />
+                      <NiceSelect
+                        value={city}
+                        onChange={setCity}
+                        options={toOptions(['City', 'Dhaka', 'Dilli', 'Newyork', 'Islamabad'])}
+                      />
                     </div>
                   </div>
                   <div className="input-group-icon mt-10">
-                    <div className="icon"><i className="fa fa-globe" aria-hidden="true"></i></div>
+                    <div className="icon">
+                      <i className="fa fa-globe" aria-hidden="true"></i>
+                    </div>
                     <div className="form-select">
-                      <NiceSelect value={country} onChange={setCountry} options={toOptions(['Country', 'Bangladesh', 'India', 'England', 'Srilanka'])} />
+                      <NiceSelect
+                        value={country}
+                        onChange={setCountry}
+                        options={toOptions(['Country', 'Bangladesh', 'India', 'England', 'Srilanka'])}
+                      />
                     </div>
                   </div>
                   <div className="mt-10">
@@ -303,31 +369,61 @@ export default function Elements() {
               <div className="col-lg-3 col-md-4 mt-sm-30">
                 <div className="single-element-widget">
                   <h3 className="mb-30">Switches</h3>
-                  <Toggle wrapper="primary-switch" id="default-switch">01. Sample Switch</Toggle>
-                  <Toggle wrapper="primary-switch" id="primary-switch" defaultChecked>02. Primary Color Switch</Toggle>
-                  <Toggle wrapper="confirm-switch" id="confirm-switch" defaultChecked>03. Confirm Color Switch</Toggle>
+                  <Toggle wrapper="primary-switch" id="default-switch">
+                    01. Sample Switch
+                  </Toggle>
+                  <Toggle wrapper="primary-switch" id="primary-switch" defaultChecked>
+                    02. Primary Color Switch
+                  </Toggle>
+                  <Toggle wrapper="confirm-switch" id="confirm-switch" defaultChecked>
+                    03. Confirm Color Switch
+                  </Toggle>
                 </div>
                 <div className="single-element-widget mt-30">
                   <h3 className="mb-30">Selectboxes</h3>
                   <div className="default-select">
-                    <NiceSelect value={language} onChange={setLanguage} options={toOptions(['English', 'Spanish', 'Arabic', 'Portuguise', 'Bengali'])} />
+                    <NiceSelect
+                      value={language}
+                      onChange={setLanguage}
+                      options={toOptions(['English', 'Spanish', 'Arabic', 'Portuguise', 'Bengali'])}
+                    />
                   </div>
                 </div>
                 <div className="single-element-widget mt-30">
                   <h3 className="mb-30">Checkboxes</h3>
-                  <Toggle wrapper="primary-checkbox" id="default-checkbox">01. Sample Checkbox</Toggle>
-                  <Toggle wrapper="primary-checkbox" id="primary-checkbox" defaultChecked>02. Primary Color Checkbox</Toggle>
-                  <Toggle wrapper="confirm-checkbox" id="confirm-checkbox">03. Confirm Color Checkbox</Toggle>
-                  <Toggle wrapper="disabled-checkbox" id="disabled-checkbox" disabled>04. Disabled Checkbox</Toggle>
-                  <Toggle wrapper="disabled-checkbox" id="disabled-checkbox-active" defaultChecked disabled>05. Disabled Checkbox active</Toggle>
+                  <Toggle wrapper="primary-checkbox" id="default-checkbox">
+                    01. Sample Checkbox
+                  </Toggle>
+                  <Toggle wrapper="primary-checkbox" id="primary-checkbox" defaultChecked>
+                    02. Primary Color Checkbox
+                  </Toggle>
+                  <Toggle wrapper="confirm-checkbox" id="confirm-checkbox">
+                    03. Confirm Color Checkbox
+                  </Toggle>
+                  <Toggle wrapper="disabled-checkbox" id="disabled-checkbox" disabled>
+                    04. Disabled Checkbox
+                  </Toggle>
+                  <Toggle wrapper="disabled-checkbox" id="disabled-checkbox-active" defaultChecked disabled>
+                    05. Disabled Checkbox active
+                  </Toggle>
                 </div>
                 <div className="single-element-widget mt-30">
                   <h3 className="mb-30">Radios</h3>
-                  <Toggle wrapper="primary-radio" id="default-radio">01. Sample radio</Toggle>
-                  <Toggle wrapper="primary-radio" id="primary-radio" defaultChecked>02. Primary Color radio</Toggle>
-                  <Toggle wrapper="confirm-radio" id="confirm-radio" defaultChecked>03. Confirm Color radio</Toggle>
-                  <Toggle wrapper="disabled-radio" id="disabled-radio" disabled>04. Disabled radio</Toggle>
-                  <Toggle wrapper="disabled-radio" id="disabled-radio-active" defaultChecked disabled>05. Disabled radio active</Toggle>
+                  <Toggle wrapper="primary-radio" id="default-radio">
+                    01. Sample radio
+                  </Toggle>
+                  <Toggle wrapper="primary-radio" id="primary-radio" defaultChecked>
+                    02. Primary Color radio
+                  </Toggle>
+                  <Toggle wrapper="confirm-radio" id="confirm-radio" defaultChecked>
+                    03. Confirm Color radio
+                  </Toggle>
+                  <Toggle wrapper="disabled-radio" id="disabled-radio" disabled>
+                    04. Disabled radio
+                  </Toggle>
+                  <Toggle wrapper="disabled-radio" id="disabled-radio-active" defaultChecked disabled>
+                    05. Disabled radio active
+                  </Toggle>
                 </div>
               </div>
             </div>

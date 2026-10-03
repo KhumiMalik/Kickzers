@@ -1,10 +1,10 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import { useCart } from '../../context/CartContext'
-import { navigation } from '../../data/site'
+import { navigation } from '../../config/site'
+import { useCurrentUser, useLogout } from '../../features/auth'
+import { useCart } from '../../features/cart'
 import { useSticky } from '../../hooks/useSticky'
-import { cx } from '../../utils/format'
+import { cx } from '../../lib/format'
 
 function isActive(item, pathname) {
   if (item.to) return item.to === '/' ? pathname === '/' : pathname.startsWith(item.to.split('/').slice(0, 2).join('/'))
@@ -16,8 +16,10 @@ export default function Header() {
   const isSticky = useSticky(wrapperRef)
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { count } = useCart()
-  const { user, logout } = useAuth()
+  const { data: cart } = useCart()
+  const count = cart?.itemCount ?? 0
+  const { data: user } = useCurrentUser()
+  const logout = useLogout()
 
   // Menu state remembers the page it was opened on, so navigating closes it.
   const [menu, setMenu] = useState({ path: null, dropdown: null })
@@ -28,6 +30,12 @@ export default function Header() {
 
   const [searchOpen, setSearchOpen] = useState(false)
   const [term, setTerm] = useState('')
+  const searchInputRef = useRef(null)
+
+  // Move focus into the search box when it opens (the template did this with jQuery).
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus()
+  }, [searchOpen])
 
   const submitSearch = (e) => {
     e.preventDefault()
@@ -41,7 +49,7 @@ export default function Header() {
     if (child.to === '/login' && user) {
       return (
         <li key="logout" className="nav-item">
-          <a href="#logout" className="nav-link" onClick={(e) => (e.preventDefault(), logout())}>
+          <a href="#logout" className="nav-link" onClick={(e) => (e.preventDefault(), logout.mutate())}>
             Logout ({user.name})
           </a>
         </li>
@@ -58,7 +66,10 @@ export default function Header() {
 
   return (
     <div ref={wrapperRef} className={cx('sticky-wrapper', isSticky && 'is-sticky')}>
-      <header className="header_area sticky-header" style={isSticky ? { position: 'fixed', top: 0, width: '100%' } : undefined}>
+      <header
+        className="header_area sticky-header"
+        style={isSticky ? { position: 'fixed', top: 0, width: '100%' } : undefined}
+      >
         <div className="main_menu">
           <nav className="navbar navbar-expand-lg navbar-light main_box">
             <div className="container">
@@ -81,7 +92,10 @@ export default function Header() {
                 <ul className="nav navbar-nav menu_nav ml-auto">
                   {navigation.map((item) =>
                     item.children ? (
-                      <li key={item.label} className={cx('nav-item submenu dropdown', isActive(item, pathname) && 'active')}>
+                      <li
+                        key={item.label}
+                        className={cx('nav-item submenu dropdown', isActive(item, pathname) && 'active')}
+                      >
                         <a
                           href="#menu"
                           className="nav-link dropdown-toggle"
@@ -95,7 +109,9 @@ export default function Header() {
                         >
                           {item.label}
                         </a>
-                        <ul className={cx('dropdown-menu', openDropdown === item.label && 'show')}>{item.children.map(renderChild)}</ul>
+                        <ul className={cx('dropdown-menu', openDropdown === item.label && 'show')}>
+                          {item.children.map(renderChild)}
+                        </ul>
                       </li>
                     ) : (
                       <li key={item.label} className={cx('nav-item', isActive(item, pathname) && 'active')}>
@@ -114,7 +130,12 @@ export default function Header() {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <button className="search" type="button" aria-label="Search" onClick={() => setSearchOpen((o) => !o)}>
+                    <button
+                      className="search"
+                      type="button"
+                      aria-label="Search"
+                      onClick={() => setSearchOpen((o) => !o)}
+                    >
                       <span className="lnr lnr-magnifier" id="search"></span>
                     </button>
                   </li>
@@ -133,11 +154,21 @@ export default function Header() {
                   id="search_input"
                   placeholder="Search Here"
                   value={term}
+                  aria-label="Search products"
+                  ref={searchInputRef}
                   onChange={(e) => setTerm(e.target.value)}
-                  autoFocus
                 />
-                <button type="submit" className="btn"></button>
-                <span className="lnr lnr-cross" id="close_search" title="Close Search" onClick={() => setSearchOpen(false)}></span>
+                <button type="submit" className="btn" aria-label="Submit search"></button>
+                <span
+                  className="lnr lnr-cross"
+                  id="close_search"
+                  title="Close Search"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Close search"
+                  onClick={() => setSearchOpen(false)}
+                  onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') && setSearchOpen(false)}
+                ></span>
               </form>
             </div>
           </div>

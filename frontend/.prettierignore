@@ -1,0 +1,9 @@
+dist
+coverage
+playwright-report
+test-results
+public
+package-lock.json
+# Third-party CSS/fonts and the template's SCSS are kept as delivered.
+src/assets/vendor
+src/styles/scss

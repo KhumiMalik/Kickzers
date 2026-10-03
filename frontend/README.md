@@ -1,73 +1,83 @@
 # Karma Shop — React frontend
 
-React 19 + Vite port of the Colorlib **Karma** e-commerce HTML template (`../template`, kept untouched as a reference).
-The Laravel API lives in `../backend`.
+React 19 + Vite port of the Colorlib **Karma** e-commerce template (`../template`, kept untouched as a reference).
+The Laravel API lives in `../backend`; the contract between them is [`../docs/api-contract.md`](../docs/api-contract.md).
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # production build in dist/
-npm run lint     # oxlint
-npm test         # Vitest unit/component tests (src/**/*.test.jsx)
-npm run test:e2e # Playwright end-to-end tests (e2e/); starts the dev server itself
+npm run dev            # http://localhost:5173
+npm run build          # production build in dist/
+npm run lint           # ESLint (zero warnings allowed)
+npm run format         # Prettier
+npm test               # Vitest unit/component tests (src/**/*.test.js[x])
+npm run test:e2e       # Playwright end-to-end tests (e2e/); starts the dev server itself
 ```
 
-The e2e suite uses your installed Google Chrome locally; on CI it uses Playwright's Chromium
-(`npx playwright install chromium`). `npm run test:e2e:ui` opens Playwright's interactive runner.
+The e2e suite uses your installed Google Chrome locally and Playwright's Chromium on CI
+(`npx playwright install chromium`). `npm run test:e2e:ui` opens the interactive runner.
 
-## How the template was ported
+A Husky pre-commit hook runs ESLint and Prettier on staged files (lint-staged).
 
-- **Styles** — Bootstrap **4.1.3** CSS (no Bootstrap JS) plus the template's own SCSS, copied to `src/styles/scss` and compiled by Vite.
-  The theme copy has a few small edits: image URLs point to `/img/...`, two typos are fixed, and some `li a` selectors also match `li > span` (for rows that are no longer fake links).
-  Everything React-specific is in `src/styles/app.scss`.
-- **Images** — `public/img` (same paths as the template). Icon fonts (Linearicons, Themify, Font Awesome 4) are in `src/assets/vendor`.
-- **No jQuery.** Plugin replacements:
+## Configuration
 
-  | Template | React |
-  |---|---|
-  | Owl Carousel | Swiper (rendering Owl's `.owl-nav` / `.owl-dots` markup so theme styles apply) |
-  | nice-select | `components/common/NiceSelect.jsx` (same markup, keyboard support) |
-  | noUiSlider (jQuery-free) | `components/product/PriceRangeSlider.jsx` wrapping `nouislider` 15 |
-  | magnific-popup | `yet-another-react-lightbox` via `hooks/useLightbox.jsx` |
-  | jquery.sticky | `hooks/useSticky.js` |
-  | countdown.js | `hooks/useCountdown.js` |
-  | Bootstrap JS (dropdown, collapse, tabs, modal) | React state + `components/common/Modal.jsx` |
-  | gmaps.js + API key | Keyless Google Maps embed |
-  | ajaxchimp / contact_process.php | Mock services in `src/api` |
+Copy `.env.example` to `.env.local` to override:
 
-## Structure
+| Variable         | Default                        | Meaning                                                 |
+| ---------------- | ------------------------------ | ------------------------------------------------------- |
+| `VITE_API_URL`   | `http://localhost:8000/api/v1` | Laravel API base URL                                    |
+| `VITE_USE_MOCKS` | `true`                         | `true`: answer requests with the in-browser mock server |
+
+Variables are validated with Zod at startup (`src/config/env.js`).
+
+## Architecture
 
 ```
 src/
-  api/          service layer — one function per future Laravel endpoint (currently mocked)
-  data/         mock catalog, blog posts and static site content
-  context/      Cart, Wishlist, Auth, Toast, QuickView providers
-  hooks/        useAsync, useForm, useSticky, useCountdown, useLightbox, …
+  app/          App (QueryClient), router (lazy pages), UI providers
+  pages/        thin route components: read URL params, call query hooks, compose features
+  features/     one folder per domain — catalog, products, cart, checkout, orders, auth,
+                wishlist, reviews, comments, blog, contact, newsletter, home
+                each: components/, api.js, queries.js, schemas.js, index.js (public API)
   components/
+    ui/         presentational primitives (NiceSelect, Modal, Pagination, toasts…) — no data fetching
     layout/     Header, Footer, PageBanner, MainLayout
-    common/     NiceSelect, QuantityInput, Modal, Pagination, Stars, form controls
-    product/    ProductCard, QuickViewModal, filters, tabs, Deals of the Week
-    home/       home page sections
-    blog/       sidebar, post meta, comments
-  pages/        one component per route (lazy-loaded except Home)
+  hooks/        shared hooks (useSticky, useCountdown, useLightbox…)
+  lib/          api-client, query-client, money, dates, forms, shared Zod schemas
+  config/       env.js (validated env), site.js (navigation + static marketing copy)
+  mocks/        in-browser mock of the Laravel API (removed in Phase 11)
+  styles/       template SCSS (lightly patched) + app.scss
 ```
 
-## Routes
+**Data flow:** component → `useX()` hook (`queries.js`, TanStack Query) → `api.js` (endpoint + Zod parse) →
+`lib/api-client.js` (fetch, cookies, CSRF, camelCase ↔ snake_case, `ApiError`) → API.
 
-`/` · `/shop` (filters live in the query string: `category`, `brand`, `color`, `min`, `max`, `q`, `sort`, `perPage`, `page`) ·
-`/product/:slug` · `/cart` · `/checkout` · `/confirmation?order=ID` · `/login` · `/tracking` · `/blog` (`category`, `tag`, `q`, `page`) ·
-`/blog/:slug` · `/contact` · `/elements`
+Rules (enforced by ESLint with `eslint-plugin-boundaries`):
 
-## Connecting the Laravel API
+- features import other features **only through their `index.js`**;
+- `components/ui` never imports features;
+- pages contain no business logic.
 
-Every function in `src/api/*.js` is commented with the endpoint it stands in for (e.g. `GET /api/products`) and returns the
-shape the UI expects, including Laravel-style validation errors (`{ message, errors: { field: [..] } }` with status 422),
-which `useForm` maps onto the form fields. To switch to the real backend, replace each function body with a `fetch` to
-that endpoint — no component changes should be needed.
+Other conventions:
 
-What the mocks do today:
+- **Server state** (catalog, cart, user, wishlist, orders…) lives only in TanStack Query. The only contexts are
+  toasts and the quick-view modal (pure UI state).
+- **Money** arrives from the API as integer minor units; `lib/money.js` formats it. The client never calculates
+  totals, discounts or shipping — the cart and order endpoints return them.
+- **Forms** use React Hook Form + Zod; `applyServerErrors()` maps the API's 422 errors onto fields.
+- **URL state:** shop and blog filters, sorting and pagination live in the query string.
 
-- Cart, wishlist, logged-in user and placed orders persist in `localStorage` (`karma.*` keys).
-- Coupons: `KARMA10` (10% off) and `SAVE20` ($20 off).
-- Login accepts any username with a password of 6+ characters; registration always succeeds.
-- Reviews and comments are kept in memory until the page reloads.
+### Mock server
+
+Until the Laravel API is connected, `VITE_USE_MOCKS=true` routes every request to `src/mocks/server.js`, which
+answers in exactly the contract's wire format (snake_case, minor units, `{ data }` envelopes, 401/404/422 errors) and
+implements the server-side rules (totals, coupons, stock, shipping by destination, idempotent checkout, sessions).
+Its state is kept in `localStorage` (`karma.mock-server.v1`) so reloads behave like a real server.
+
+Demo data: coupons `KARMA10` (10%) and `SAVE20` ($20); login accepts any username with a 6+ character password.
+
+## Template notes
+
+- Bootstrap **4.1.3** CSS only (no Bootstrap JS); jQuery plugins were replaced by Swiper, a NiceSelect component,
+  nouislider, yet-another-react-lightbox, and small hooks.
+- The template SCSS in `src/styles/scss` is the original with small patches (image paths, two typos, a few
+  `li a` selectors widened to `li > span`).

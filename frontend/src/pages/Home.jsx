@@ -1,20 +1,29 @@
-import { getHomeData } from '../api/products'
-import Loader from '../components/common/Loader'
-import BrandArea from '../components/home/BrandArea'
-import CategoryArea from '../components/home/CategoryArea'
-import ExclusiveDeal from '../components/home/ExclusiveDeal'
-import FeaturesArea from '../components/home/FeaturesArea'
-import HeroBanner from '../components/home/HeroBanner'
-import ProductCarousel from '../components/home/ProductCarousel'
-import DealsOfTheWeek from '../components/product/DealsOfTheWeek'
-import { useAsync } from '../hooks/useAsync'
+import ErrorState from '../components/ui/ErrorState'
+import Loader from '../components/ui/Loader'
+import {
+  BrandArea,
+  CategoryArea,
+  ExclusiveDeal,
+  FeaturesArea,
+  HeroBanner,
+  ProductCarousel,
+  useHome,
+} from '../features/home'
+import { DealsOfTheWeek } from '../features/products'
 import { useDocumentTitle } from '../hooks/useDocumentTitle'
 
 export default function Home() {
   useDocumentTitle()
-  const { data } = useAsync(getHomeData, [])
+  const { data, isPending, isError, refetch } = useHome()
 
-  if (!data) return <Loader />
+  if (isPending) return <Loader />
+  if (isError) {
+    return (
+      <section className="section_gap">
+        <ErrorState message="The home page could not be loaded." onRetry={refetch} />
+      </section>
+    )
+  }
 
   return (
     <>
@@ -24,12 +33,12 @@ export default function Home() {
       <ProductCarousel
         slides={[
           { title: 'Latest Products', products: data.latest },
-          { title: 'Coming Products', products: data.coming },
+          { title: 'Coming Products', products: data.comingSoon },
         ]}
       />
-      <ExclusiveDeal products={data.exclusive} />
+      {data.exclusiveDeal && <ExclusiveDeal deal={data.exclusiveDeal} />}
       <BrandArea />
-      <DealsOfTheWeek products={data.deals} className="section_gap_bottom" />
+      <DealsOfTheWeek products={data.dealsOfTheWeek?.products} className="section_gap_bottom" />
     </>
   )
 }

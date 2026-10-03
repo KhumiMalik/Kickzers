@@ -1,21 +1,9 @@
-import { useState } from 'react'
-import { subscribeNewsletter } from '../../api/site'
-import { instagramFeed, socialLinks } from '../../data/site'
-import { useForm } from '../../hooks/useForm'
-import { email, required } from '../../utils/validation'
+import { instagramFeed, socialLinks } from '../../config/site'
+import { FooterNewsletter } from '../../features/newsletter'
 
 const year = new Date().getFullYear()
 
 export default function Footer() {
-  const [message, setMessage] = useState(null)
-  const form = useForm({ email: '' }, { email: [required('Email'), email()] })
-
-  const onSubscribe = form.submit(async ({ email: address }) => {
-    const res = await subscribeNewsletter(address)
-    setMessage(res.message)
-    form.reset()
-  })
-
   return (
     <footer className="footer-area section_gap">
       <div className="container">
@@ -24,8 +12,8 @@ export default function Footer() {
             <div className="single-footer-widget">
               <h6>About Us</h6>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore dolore magna
-                aliqua.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                dolore magna aliqua.
               </p>
             </div>
           </div>
@@ -33,23 +21,7 @@ export default function Footer() {
             <div className="single-footer-widget">
               <h6>Newsletter</h6>
               <p>Stay update with our latest</p>
-              <div id="mc_embed_signup">
-                <form noValidate className="form-inline" onSubmit={onSubscribe}>
-                  <div className="d-flex flex-row">
-                    <input
-                      className="form-control"
-                      type="email"
-                      placeholder="Enter Email"
-                      aria-label="Email address"
-                      {...form.field('email')}
-                    />
-                    <button className="click-btn btn btn-default" disabled={form.submitting} aria-label="Subscribe">
-                      <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                  <div className="info">{form.errors.email ?? form.errors.form ?? message}</div>
-                </form>
-              </div>
+              <FooterNewsletter />
             </div>
           </div>
           <div className="col-lg-3 col-md-6 col-sm-6">

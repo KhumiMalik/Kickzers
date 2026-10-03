@@ -17,7 +17,10 @@ test.describe('Shop listing', () => {
 
   test('filters by category, including its sub-categories', async ({ page }) => {
     await page.goto('/shop')
-    await page.locator('.sidebar-categories').getByRole('link', { name: /^Women's Shoes/ }).click()
+    await page
+      .locator('.sidebar-categories')
+      .getByRole('link', { name: /^Women's Shoes/ })
+      .click()
 
     await expect(page).toHaveURL(/category=women-shoes/)
     await expect(page.locator('.single-product')).toHaveCount(3)
@@ -68,7 +71,10 @@ test.describe('Shop listing', () => {
     await page.getByPlaceholder('Search Here').press('Enter')
 
     await expect(page).toHaveURL(/\/shop\?q=jersey/)
-    await expect(page.locator('.single-product .product-title')).toHaveText(['Away Football Jersey', 'Red Training Jersey'])
+    await expect(page.locator('.single-product .product-title')).toHaveText([
+      'Away Football Jersey',
+      'Red Training Jersey',
+    ])
     await expect(page.locator('.search-summary')).toContainText('jersey')
   })
 })

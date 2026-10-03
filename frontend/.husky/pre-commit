@@ -1,0 +1,2 @@
+# Runs from the repository root. Lints and formats only the staged frontend files.
+cd frontend && npx lint-staged

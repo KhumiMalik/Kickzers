@@ -616,6 +616,8 @@ Public. Limiter `checkout`. Header **`Idempotency-Key`** required (UUID).
 What the server does (the `PlaceOrder` action, in one DB transaction):
 
 1. Locks the cart's product rows (`lockForUpdate`) and re-checks every line: published, in stock, quantity ≤ stock.
+   It also checks that the cart's shipping method is available for the **shipping address** country
+   (e.g. Local Delivery is US-only); otherwise 422 `errors.cart`. *(Added in Phase 3.)*
 2. Re-validates the coupon (expiry, usage limit, minimum amount) and recalculates all totals.
 3. Creates the order, order items (snapshot name, slug, SKU and unit price) and addresses.
 4. Decrements stock and records the coupon redemption.

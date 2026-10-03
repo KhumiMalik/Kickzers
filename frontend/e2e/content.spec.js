@@ -38,7 +38,10 @@ test.describe('Blog', () => {
     await page.goto('/blog')
     await expect(page.locator('.blog_item')).toHaveCount(5)
 
-    await page.locator('.post_category_widget').getByRole('link', { name: /Technology/ }).click()
+    await page
+      .locator('.post_category_widget')
+      .getByRole('link', { name: /Technology/ })
+      .click()
     await expect(page).toHaveURL(/category=technology/)
     await expect(page.locator('.search-summary')).toContainText('Technology')
     await expect(page.locator('.blog_item')).toHaveCount(4)
