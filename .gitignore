@@ -1,0 +1,7 @@
+# OS / editor files (each app has its own .gitignore for build output and dependencies)
+.DS_Store
+_DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

@@ -1,0 +1,477 @@
+// React-specific additions on top of the Karma theme.
+// Everything here either adapts the theme to markup that changed in the
+// port (buttons instead of anchors, Swiper instead of Owl) or styles UI
+// the static template never had (toasts, validation messages, cart badge).
+
+@import 'scss/theme/variables';
+
+$gradient: linear-gradient(90deg, $primary-color 0%, $primary-color2 100%);
+
+// ---------- Buttons that replaced <a> tags ----------
+button.primary-btn,
+button.view-btn,
+button.add-btn,
+button.icon_btn,
+button.like-btn,
+button.tp_btn,
+button.bbtns,
+button.btn-reply,
+button.cart-remove,
+button.filter-reset {
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+
+// display:block stretches an <a> but not a <button>
+.order_box button.primary-btn {
+  width: 100%;
+}
+
+.checkout_area .returning_customer,
+.checkout_area .cupon_area {
+  margin-bottom: 30px;
+}
+
+button.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-bag button.add-btn {
+  padding: 0;
+}
+
+.reply-btn button.btn-reply {
+  border: 1px solid #eee;
+}
+
+.s_product_text .card_area .icon_btn.is-active::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+// Quick view "like" button (the template had no styles for it)
+.like-btn {
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 50%;
+  background: #828bb2;
+  color: #fff;
+  transition: all 0.3s ease;
+
+  &:hover,
+  &.is-active {
+    background: $gradient;
+  }
+}
+
+// Wishlist "saved" state reuses the hover look of the card actions
+.single-product .product-details .prd-bottom .social-info.is-active span::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+// Keep grid rows aligned when a product photo has a different shape (template photos are 263x280).
+.single-product > a > img {
+  aspect-ratio: 263 / 280;
+  object-fit: contain;
+  background: #f9f9ff;
+}
+
+.single-product .product-title {
+  color: inherit;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.single-product .price .coming-soon {
+  color: $primary-color2;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+// ---------- Header ----------
+.header_area .navbar .nav.navbar-nav.navbar-right .cart {
+  position: relative;
+
+  .cart-count {
+    position: absolute;
+    top: 18px;
+    right: -12px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: $gradient;
+    color: #fff;
+    font-size: 10px;
+    line-height: 18px;
+    text-align: center;
+  }
+}
+
+#search_input_box {
+  animation: slide-down 0.3s ease;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+// ---------- Carousels (Swiper rendering Owl markup) ----------
+.active-banner-slider,
+.active-product-area,
+.active-exclusive-product-slider,
+.s_Product_carousel {
+  position: relative;
+}
+
+.owl-nav .owl-prev,
+.owl-nav .owl-next {
+  cursor: pointer;
+  z-index: 2;
+}
+
+.s_Product_carousel .owl-dots {
+  z-index: 2;
+
+  div {
+    cursor: pointer;
+  }
+}
+
+.quick-view-carousel {
+  .item {
+    height: 450px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: $primary-color;
+  }
+}
+
+// ---------- Quick view modal ----------
+.quick-view-dialog {
+  max-width: 1000px;
+  margin-top: 60px;
+
+  // Bootstrap disables pointer events on .modal-dialog and re-enables them on
+  // .modal-content, which the template's quick-view markup doesn't have.
+  > .container {
+    pointer-events: auto;
+    background: #fff;
+    padding: 40px;
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 5;
+  }
+
+  .quick-view-content {
+    .head {
+      margin-bottom: 15px;
+    }
+
+    .price {
+      font-size: 22px;
+      color: $title-color;
+      margin-bottom: 10px;
+    }
+
+    .category span,
+    .available span {
+      color: $primary-color;
+    }
+
+    .middle {
+      margin: 20px 0;
+      padding: 20px 0;
+      border-top: 1px dotted #d5d5d5;
+      border-bottom: 1px dotted #d5d5d5;
+    }
+
+    .view-full {
+      color: $primary-color;
+    }
+  }
+}
+
+// ---------- Shop ----------
+.price-range-area .noUi-horizontal .noUi-handle {
+  // noUiSlider 15 positions handles from the right edge (v10 used left).
+  left: auto;
+  right: -8px;
+}
+
+.price-range-area .noUi-connect {
+  background: $primary-color;
+}
+
+.sidebar-categories .main-nav-list a.is-current {
+  color: $primary-color;
+}
+
+.sidebar-filter .filter-reset {
+  background: transparent;
+  color: #fff;
+  font-size: 13px;
+  text-decoration: underline;
+}
+
+.lattest-product-area.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.single-related-product img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.search-summary {
+  margin: 20px 0 0;
+  padding: 12px 20px;
+  background: #f9f9ff;
+  color: $text-color;
+
+  button,
+  a {
+    margin-left: 15px;
+    background: none;
+    border: 0;
+    color: $primary-color;
+    cursor: pointer;
+  }
+}
+
+// ---------- Cart / checkout ----------
+.cart_area .cart_inner .table tbody tr td .media .d-flex .cart-thumb {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.cart_inner .media-body p a {
+  color: inherit;
+
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+.cart-remove {
+  background: transparent;
+  color: #999;
+  font-size: 12px;
+  padding: 0;
+  margin-top: 6px;
+
+  &:hover {
+    color: $primary-color2;
+  }
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 60px 0 !important;
+
+  h5 {
+    margin-bottom: 25px;
+  }
+}
+
+.coupon-note {
+  white-space: nowrap;
+  color: #28a745;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.nice-select.is-invalid {
+  border-color: #dc3545;
+}
+
+.nice-select.disabled {
+  opacity: 0.6;
+}
+
+// ---------- Forms ----------
+.field-error {
+  color: #dc3545;
+  font-size: 13px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+.form-alert {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  border-radius: 3px;
+
+  &-error {
+    background: #fdecea;
+    color: #b02a37;
+  }
+
+  &-success {
+    background: #e8f6ec;
+    color: #1e7e34;
+  }
+}
+
+.star-picker button {
+  background: none;
+  border: 0;
+  padding: 0 2px;
+  color: #fbd600;
+  cursor: pointer;
+}
+
+.tracking-result {
+  margin-top: 30px;
+  padding: 25px 30px;
+  background: #f9f9ff;
+
+  h4 span {
+    color: $primary-color;
+  }
+
+  li {
+    line-height: 28px;
+  }
+
+  a {
+    color: $primary-color;
+  }
+}
+
+// ---------- Contact ----------
+.mapBox iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+// ---------- Shared states ----------
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+
+  p,
+  h3 {
+    margin-bottom: 25px;
+  }
+}
+
+.page-loader {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 160px 0 120px;
+
+  .loader-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $primary-color;
+    animation: loader-bounce 1s infinite ease-in-out;
+
+    &:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+  }
+}
+
+// Inside a page section the header no longer overlaps, so the loader can be shorter.
+section .page-loader,
+.posts-list .page-loader,
+.container > .page-loader {
+  padding: 60px 0;
+}
+
+@keyframes loader-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.5);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ---------- Toasts ----------
+.toast-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 260px;
+  max-width: 360px;
+  padding: 14px 18px;
+  background: #fff;
+  color: $title-color;
+  border-left: 4px solid $primary-color;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  cursor: pointer;
+  animation: toast-in 0.25s ease;
+
+  .lnr {
+    font-size: 18px;
+    color: $primary-color2;
+  }
+
+  &.toast-error {
+    border-left-color: #dc3545;
+
+    .lnr {
+      color: #dc3545;
+    }
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
