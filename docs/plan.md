@@ -198,7 +198,7 @@ and PostgreSQL), with backed-enum casts on the model.
 | `wishlist_items` | user_id, product_id | unique (user_id, product_id) |
 | `contact_messages` | name, email, subject, message, ip_address | created_at |
 | `newsletter_subscribers` | email, ip_address, subscribed_at, unsubscribed_at (null) | email unique |
-| Laravel defaults | sessions, cache, jobs, failed_jobs, password_reset_tokens, personal_access_tokens (from Sanctum) | |
+| Laravel defaults | sessions, cache, jobs, failed_jobs, password_reset_tokens | Sanctum's personal_access_tokens table is **not** created: the SPA uses session cookies only (Phase 4) |
 
 Notes:
 
@@ -265,8 +265,8 @@ configs that can disagree. Its speed advantage doesn't matter at this project si
 | `laravel/sanctum` | 4.3 | via `php artisan install:api` |
 | `dedoc/scramble` | 0.13 | OpenAPI docs |
 | `laravel/boost` (dev) | 2.10 | install + follow its guidelines |
-| `pestphp/pest` (dev) | 5.3 | replaces the PHPUnit-style tests (PHPUnit stays as its engine) |
-| `pestphp/pest-plugin-laravel` (dev) | 5.0 | **approve**: Laravel helpers for Pest |
+| `pestphp/pest` (dev) | **4.7** | Pest 5 requires PHP 8.4; the project targets PHP 8.3, so 4.7 is the newest compatible version (Phase 4) |
+| `pestphp/pest-plugin-laravel` (dev) | 4.1 | **approve**: Laravel helpers for Pest |
 | `larastan/larastan` (dev) | 3.12 | PHPStan for Laravel |
 | `laravel/pint` (dev) | 1.32 | already present; I'll update it |
 

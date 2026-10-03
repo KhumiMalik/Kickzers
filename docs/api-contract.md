@@ -368,6 +368,14 @@ product was later deleted.
 
 ---
 
+## 2b. Utility
+
+| Method | Path | Auth | Success |
+|---|---|---|---|
+| GET | `/health` | public | 200 `{ "status": "ok" }`, a liveness check used by the e2e runner and monitoring *(added in Phase 4)* |
+
+---
+
 ## 3. Auth
 
 | Method | Path | Auth | Limit | Request | Success | Errors |

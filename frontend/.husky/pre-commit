@@ -1,2 +1,11 @@
-# Runs from the repository root. Lints and formats only the staged frontend files.
-cd frontend && npx lint-staged
+# Runs from the repository root before every commit.
+
+# Frontend: ESLint + Prettier on staged files (config in frontend/package.json "lint-staged").
+(cd frontend && npx lint-staged) || exit 1
+
+# Backend: format staged PHP files with Pint and re-stage them.
+php_files=$(git diff --cached --name-only --diff-filter=ACMR -- 'backend/*.php' | sed 's#^backend/##')
+if [ -n "$php_files" ]; then
+  (cd backend && vendor/bin/pint $php_files) || exit 1
+  git add $(printf 'backend/%s ' $php_files)
+fi
