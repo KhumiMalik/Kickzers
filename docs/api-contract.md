@@ -13,6 +13,9 @@ Additive changes since approval (all backwards compatible):
 - Phase 6: promotion blocks (`exclusive_deal`, `deals_of_the_week`, `/promotions/deals-of-the-week`) always include
   `title`; post links (`previous`, `next`, sidebar `popular`) all include `published_at`; the 404 from
   `/promotions/deals-of-the-week` carries `"code": "no_active_promotion"`.
+- Phase 7: `POST /wishlist/merge` validates only the shape of `product_ids`; ids of products that are unknown or no
+  longer published are skipped (a stale browser wishlist must not break the login flow). Wishlist lists leave out
+  saved products that have since become drafts.
 
 ---
 

@@ -50,6 +50,12 @@ final class ProductRepository extends BaseRepository
         return $this->query()->published()->where('slug', $slug)->firstOrFail();
     }
 
+    /** A published product by id, ready for a ProductSummary. */
+    public function findPublishedSummary(int $id): Product
+    {
+        return $this->query()->published()->withSummaryRelations()->findOrFail($id);
+    }
+
     /** Loads everything the product page shows (ProductDetail). */
     public function loadDetail(Product $product): Product
     {

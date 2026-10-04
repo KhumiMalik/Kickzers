@@ -21,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 /**
  * A placed order. Amounts, names and addresses are snapshots taken at
  * checkout; they never change when the catalog does.
+ *
+ * @property-read int|string|null $items_sum_quantity only when loaded with withSum('items', 'quantity')
  */
 #[Fillable([
     'number', 'user_id', 'idempotency_key', 'status', 'payment_status', 'payment_method', 'email', 'currency',

@@ -143,6 +143,7 @@ backend/app/
 │   ├── Blog/     PostRepository, BlogSidebarRepository
 │   ├── Cart/     CartRepository
 │   ├── Orders/   OrderRepository
+│   ├── Wishlist/ WishlistRepository
 │   ├── Content/  ReviewRepository, CommentRepository, ContactMessageRepository, NewsletterRepository
 │   └── Reference/ CountryRepository
 ├── Events/          OrderPlaced, ContactMessageReceived

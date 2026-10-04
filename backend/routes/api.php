@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\Account\OrderController as AccountOrderController;
+use App\Http\Controllers\Api\V1\Auth\CurrentUserController;
+use App\Http\Controllers\Api\V1\Auth\RegisteredUserController;
+use App\Http\Controllers\Api\V1\Auth\SessionController;
 use App\Http\Controllers\Api\V1\Blog\BlogSidebarController;
 use App\Http\Controllers\Api\V1\Blog\PostController;
 use App\Http\Controllers\Api\V1\Cart\CountryController;
@@ -15,6 +19,8 @@ use App\Http\Controllers\Api\V1\Comments\PostCommentController;
 use App\Http\Controllers\Api\V1\Comments\ProductCommentController;
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\Reviews\ProductReviewController;
+use App\Http\Controllers\Api\V1\Wishlist\MergeWishlistController;
+use App\Http\Controllers\Api\V1\Wishlist\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,4 +58,32 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
     // Reference data (§9, §10)
     Route::get('countries', CountryController::class)->name('countries.index');
     Route::get('payment-methods', PaymentMethodController::class)->name('payment-methods.index');
+
+    // Auth (§3). Register/login answer 403 to logged-in users (their FormRequest authorize()).
+    Route::prefix('auth')->name('auth.')->group(function (): void {
+        Route::middleware('throttle:auth')->group(function (): void {
+            Route::post('register', RegisteredUserController::class)->name('register');
+            Route::post('login', [SessionController::class, 'store'])->name('login');
+        });
+
+        Route::middleware('auth:sanctum')->group(function (): void {
+            Route::post('logout', [SessionController::class, 'destroy'])->name('logout');
+            Route::get('user', CurrentUserController::class)->name('user');
+        });
+    });
+
+    // Logged-in customers only (401 otherwise)
+    Route::middleware('auth:sanctum')->group(function (): void {
+        // Account (§4); {order} is the order number
+        Route::get('account/orders', [AccountOrderController::class, 'index'])->name('account.orders.index');
+        Route::get('account/orders/{order}', [AccountOrderController::class, 'show'])->name('account.orders.show');
+
+        // Wishlist (§8)
+        Route::get('wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+        Route::post('wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+        Route::post('wishlist/merge', MergeWishlistController::class)->name('wishlist.merge');
+        Route::delete('wishlist/{productId}', [WishlistController::class, 'destroy'])
+            ->whereNumber('productId')
+            ->name('wishlist.destroy');
+    });
 });
