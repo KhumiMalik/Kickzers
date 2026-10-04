@@ -31,7 +31,8 @@ The storefront is built on the [Colorlib "Karma"](https://colorlib.com) template
 
 ## Getting started
 
-Requirements: PHP 8.3 with `intl`, `pdo_mysql` and `pdo_sqlite`; Composer 2; Node.js 24; MySQL 8 (or SQLite).
+Requirements: PHP 8.3 with `intl`, `pdo_mysql` and `pdo_sqlite`; Composer 2; Node.js 24 (CI uses the version in
+`frontend/.nvmrc`; use the same one so `package-lock.json` stays compatible); MySQL 8 (or SQLite).
 
 ### 1. API
 
