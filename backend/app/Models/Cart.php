@@ -44,6 +44,16 @@ final class Cart extends Model
     }
 
     /**
+     * Notices waiting to be shown (the JSON column, as a clean list of strings).
+     *
+     * @return list<string>
+     */
+    public function pendingNotices(): array
+    {
+        return array_values(array_filter($this->notices ?? [], is_string(...)));
+    }
+
+    /**
      * @return array<string, string>
      */
     protected function casts(): array

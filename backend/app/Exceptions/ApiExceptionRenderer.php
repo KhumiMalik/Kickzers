@@ -10,6 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
@@ -59,9 +60,10 @@ final class ApiExceptionRenderer
         $previous = $exception->getPrevious();
 
         return match (true) {
-            // "Product not found." when route model binding fails, "Not found." for unknown URLs.
+            // "Product not found." / "Cart item not found." when a model lookup fails,
+            // "Not found." for unknown URLs.
             $exception instanceof NotFoundHttpException => $previous instanceof ModelNotFoundException
-                ? class_basename($previous->getModel()).' not found.'
+                ? Str::ucfirst(Str::lower(Str::headline(class_basename($previous->getModel())))).' not found.'
                 : 'Not found.',
             $exception instanceof MethodNotAllowedHttpException => 'Method not allowed.',
             $exception instanceof ThrottleRequestsException => sprintf(

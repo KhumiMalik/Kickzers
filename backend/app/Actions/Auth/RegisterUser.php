@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
  * Creates a customer account and logs it in.
  *
  * Fires Laravel's Registered event so features such as e-mail verification
- * can be added later without touching this class. The guest cart and
- * wishlist are merged by the callers of the session (Phase 8 / frontend).
+ * can be added later without touching this class. The controller merges the
+ * guest cart (MergeGuestCart); the frontend merges the browser wishlist.
  */
 final readonly class RegisterUser
 {

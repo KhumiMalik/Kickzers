@@ -16,6 +16,19 @@ Additive changes since approval (all backwards compatible):
 - Phase 7: `POST /wishlist/merge` validates only the shape of `product_ids`; ids of products that are unknown or no
   longer published are skipped (a stale browser wishlist must not break the login flow). Wishlist lists leave out
   saved products that have since become drafts.
+- Phase 8: coupon errors (`errors.code`) are "This coupon code is not valid.", "This coupon is not valid yet.",
+  "This coupon has expired.", "This coupon has reached its usage limit." and "Spend $50.00 or more to use this coupon.".
+  A shipping method without any rate row is not offered. A cart item id from another cart answers
+  404 "Cart item not found." (never 403, so ids of other carts are not revealed). The guest cart cookie is only read
+  and set for requests from the SPA origin (Sanctum's stateful middleware decrypts it).
+- Phase 9: a missing or non-UUID `Idempotency-Key` answers 400 `{ "code": "idempotency_key_missing" }`. The
+  payment gateway sets the new order's status: cash on delivery → `processing`, check payments → `pending` (it ships
+  once the check clears); both `unpaid`. The tracking 404 carries `"code": "order_not_found"`. Logged-in customers may
+  leave `billing.email` empty (the account e-mail is used) and their `create_account` is ignored.
+- Phase 10: the contact notification goes to `SHOP_ADMIN_EMAIL` (config `shop.admin_email`; §11 originally said
+  `MAIL_ADMIN_ADDRESS`), with the visitor as reply-to. Rating errors say "Please choose a rating from 1 to 5."; an
+  invalid `parent_id` says "You can only reply to a top-level comment on this page." (a reply, another page's comment
+  and an unpublished comment are all invalid parents). Re-subscribing an unsubscribed address re-activates it.
 
 ---
 

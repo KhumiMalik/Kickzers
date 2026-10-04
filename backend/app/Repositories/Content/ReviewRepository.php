@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories\Content;
 
 use App\DTOs\Catalog\RatingSummary;
+use App\DTOs\Content\AuthorData;
 use App\Models\Product;
 use App\Models\Review;
 use App\Repositories\BaseRepository;
@@ -30,6 +31,21 @@ final class ReviewRepository extends BaseRepository
             ->latest()
             ->orderByDesc('id')
             ->paginate($perPage);
+    }
+
+    public function createFor(Product $product, AuthorData $author, int $rating, string $body): Review
+    {
+        return $this->create([
+            'product_id' => $product->id,
+            'user_id' => $author->userId,
+            'author_name' => $author->name,
+            'author_email' => $author->email,
+            'author_phone' => $author->phone,
+            'rating' => $rating,
+            'body' => $body,
+            // Published straight away (decision Q8); the column lets moderation be switched on later.
+            'is_approved' => true,
+        ]);
     }
 
     /**

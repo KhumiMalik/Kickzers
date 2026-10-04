@@ -116,32 +116,35 @@ Everything else (markup, classes, look) stays the same. The Phase 2 e2e tests ac
 backend/app/
 ├── Actions/
 │   ├── Auth/        RegisterUser, LoginUser, LogoutUser
-│   ├── Cart/        ResolveCart, AddCartItem, UpdateCartItem, RemoveCartItem, EmptyCart,
+│   ├── Cart/        AddCartItem, UpdateCartItem, RemoveCartItem, EmptyCart,
 │   │                ApplyCoupon, RemoveCoupon, SetShippingMethod, SetDestination, MergeGuestCart,
-│   │                CalculateCartTotals, ReconcileCart (stock/availability notices)
+│   │                CalculateCartTotals, ReconcileCart (stock/availability notices), SummarizeCart,
+│   │                QuoteShippingOptions, CheckCoupon, CheckStock
 │   ├── Checkout/    PlaceOrder
-│   └── Orders/      GenerateOrderNumber, TrackOrder
+│   ├── Orders/      GenerateOrderNumber, TrackOrder
+│   └── Content/     SendContactMessage
 ├── DTOs/
-│   ├── Cart/        CartTotals, CartLine
-│   ├── Checkout/    CheckoutData, AddressData
-│   └── Orders/      OrderTrackingQuery
+│   ├── Cart/        CartTotals, CartLine, CartSummary, ShippingOption
+│   └── Checkout/    CheckoutData, AddressData, PaymentResult, PlacedOrder
 ├── Enums/           OrderStatus, PaymentStatus, PaymentMethod, CouponType, ShippingMethod,
 │                    ProductStatus, AddressType, PromotionType, ProductSort
-├── Exceptions/      CartException, OutOfStockException, InvalidCouponException, IdempotencyConflictException
+├── Exceptions/      CartException, CheckoutException (rule failures → 422 on a field), IdempotencyException (400 / 409),
+│                    OrderNotTrackedException, NoActivePromotionException
 ├── Contracts/       PaymentGateway
-├── Services/        MediaUrl; Payments/ CashOnDeliveryGateway, CheckPaymentGateway, PaymentGatewayRegistry
+├── Services/        MediaUrl, Money; Cart/ CartResolver, CartCookie; Orders/ PlacedOrdersSession; Payments/ CashOnDeliveryGateway, CheckPaymentGateway, PaymentGatewayRegistry
 ├── Http/
 │   ├── Controllers/Api/V1/{Catalog,Blog,Cart,Checkout,Orders,Auth,Account,Wishlist,Reviews,Comments,Contact,Newsletter}/
 │   ├── Requests/{same}/
 │   ├── Resources/{same}/
 │   └── Middleware/   (none expected; Sanctum's stateful middleware is configured in bootstrap/app.php)
-├── Models/          + Builders/ProductBuilder, PostBuilder, CouponBuilder
-├── Policies/        OrderPolicy, CartItemPolicy, CommentPolicy (parent check)
+├── Models/          + Builders/ProductBuilder, PostBuilder (coupons are looked up by CouponRepository)
+├── Policies/        OrderPolicy. Cart items need none (looked up inside the visitor's own cart); the comment reply rule
+│                    is a validation rule on parent_id (StoreCommentRequest), not a policy
 ├── Repositories/
 │   ├── BaseRepository.php
 │   ├── Catalog/  ProductRepository, CategoryRepository, BrandRepository, ColorRepository, PromotionRepository, BannerRepository
 │   ├── Blog/     PostRepository, BlogSidebarRepository
-│   ├── Cart/     CartRepository
+│   ├── Cart/     CartRepository, ShippingRateRepository, CouponRepository
 │   ├── Orders/   OrderRepository
 │   ├── Wishlist/ WishlistRepository
 │   ├── Content/  ReviewRepository, CommentRepository, ContactMessageRepository, NewsletterRepository
