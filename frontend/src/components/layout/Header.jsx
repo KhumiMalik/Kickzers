@@ -74,7 +74,7 @@ export default function Header() {
           <nav className="navbar navbar-expand-lg navbar-light main_box">
             <div className="container">
               <Link className="navbar-brand logo_h" to="/">
-                <img src="/img/logo.png" alt="Karma Shop" />
+                <img src="/img/logo.svg" alt="Kickzers" />
               </Link>
               <button
                 className="navbar-toggler"

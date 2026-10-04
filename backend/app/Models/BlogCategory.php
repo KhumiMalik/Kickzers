@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * Blog category. Categories with a `featured_position` are also shown as the
  * cards above the blog list (with their own title, tagline and image).
+ *
+ * @property-read int $posts_count only when loaded with withCount('posts')
  */
 #[Fillable(['name', 'slug', 'featured_title', 'featured_tagline', 'featured_image_path', 'featured_position'])]
 final class BlogCategory extends Model

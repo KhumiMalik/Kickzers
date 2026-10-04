@@ -92,6 +92,42 @@ final class ProductBuilder extends Builder
             ->orWhereIn('brand_id', Brand::query()->select('id')->whereLike('name', "%{$term}%")));
     }
 
+    /** Eager-loads what a product card (ProductSummary) shows, so listings make no extra queries per product. */
+    public function withSummaryRelations(): self
+    {
+        return $this->with(self::summaryRelations());
+    }
+
+    /**
+     * The relations a product card needs, optionally under a parent relation
+     * (`summaryRelations('publishedProducts')` → `publishedProducts.brand`, …).
+     *
+     * @return list<string>
+     */
+    public static function summaryRelations(?string $through = null): array
+    {
+        $relations = ['primaryImage', 'category', 'brand'];
+
+        return $through === null ? $relations : array_map(fn (string $relation): string => "{$through}.{$relation}", $relations);
+    }
+
+    /**
+     * Other products, those from the same family (the parent category and its
+     * children) first, then the rest in catalog order.
+     */
+    public function relatedTo(Product $product): self
+    {
+        $familyId = Category::query()->whereKey($product->category_id)->value('parent_id') ?? $product->category_id;
+
+        return $this->whereKeyNot($product->getKey())
+            ->orderByRaw(
+                'case when category_id in (select id from categories where id = ? or parent_id = ?) then 0 else 1 end',
+                [$familyId, $familyId],
+            )
+            ->orderBy('position')
+            ->orderBy('id');
+    }
+
     /** Sort order, always ending with the primary key so pagination is stable. */
     public function sortedBy(ProductSort $sort): self
     {

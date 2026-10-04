@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/** @property-read int $products_count only when loaded with withCount('products') */
 #[Fillable(['name', 'slug'])]
 final class Brand extends Model
 {

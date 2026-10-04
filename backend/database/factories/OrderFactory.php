@@ -27,7 +27,7 @@ final class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'number' => 'KS-'.now()->year.'-'.fake()->unique()->numerify('######'),
+            'number' => 'KZ-'.now()->year.'-'.fake()->unique()->numerify('######'),
             'user_id' => null,
             'idempotency_key' => (string) Str::uuid(),
             'status' => OrderStatus::Processing,

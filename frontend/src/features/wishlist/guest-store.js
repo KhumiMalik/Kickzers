@@ -5,7 +5,7 @@ import { useSyncExternalStore } from 'react'
  * when WishlistSync merges them into the account (decision Q3 in docs/plan.md).
  * Implemented as a tiny external store so every component sees the same list.
  */
-const STORAGE_KEY = 'karma.guest-wishlist'
+const STORAGE_KEY = 'kickzers.guest-wishlist'
 const listeners = new Set()
 
 function read() {

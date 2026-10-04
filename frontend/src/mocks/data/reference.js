@@ -39,6 +39,6 @@ export const paymentMethods = [
 ]
 
 export const coupons = [
-  { code: 'KARMA10', type: 'percent', value: 10, description: '10% off', min_subtotal: null, expires_at: null },
+  { code: 'KICKZERS10', type: 'percent', value: 10, description: '10% off', min_subtotal: null, expires_at: null },
   { code: 'SAVE20', type: 'fixed', value: 2000, description: '$20 off', min_subtotal: null, expires_at: null },
 ]

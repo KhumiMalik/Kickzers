@@ -66,7 +66,7 @@ final class ReferenceDataSeeder extends Seeder
 
     private function seedCoupons(): void
     {
-        Coupon::query()->updateOrCreate(['code' => 'KARMA10'], [
+        Coupon::query()->updateOrCreate(['code' => 'KICKZERS10'], [
             'type' => CouponType::Percent,
             'value' => 10,
             'description' => '10% off',

@@ -23,7 +23,7 @@ test.describe('Bag and cart', () => {
     await expect(cartLink(page)).toHaveAccessibleName('Shopping cart, 2 items')
   })
 
-  test('rejects an invalid coupon and applies KARMA10', async ({ page }) => {
+  test('rejects an invalid coupon and applies KICKZERS10', async ({ page }) => {
     await addFromProductPage(page, 'aero-knit-running-shoe', 2)
     await page.goto('/cart')
     const coupon = page.getByPlaceholder('Coupon Code')
@@ -32,9 +32,9 @@ test.describe('Bag and cart', () => {
     await page.getByRole('button', { name: 'Apply' }).click()
     await expect(page.locator('.cart_inner')).toContainText('This coupon code is not valid.')
 
-    await coupon.fill('karma10')
+    await coupon.fill('kickzers10')
     await page.getByRole('button', { name: 'Apply' }).click()
-    await expect(page.locator('.coupon-note')).toContainText('KARMA10')
+    await expect(page.locator('.coupon-note')).toContainText('KICKZERS10')
     await expect(cartTotalsRow(page, 'Subtotal')).toHaveText('$300.00')
     await expect(cartTotalsRow(page, 'Discount')).toHaveText('-$30.00')
   })

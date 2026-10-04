@@ -52,11 +52,11 @@ return [
         /*
          * Description rendered on the home page of the API documentation (`/docs/api`).
          */
-        'description' => 'Karma Shop storefront API. Authentication uses Sanctum SPA session cookies; see docs/api-contract.md.',
+        'description' => 'Kickzers storefront API. Authentication uses Sanctum SPA session cookies; see docs/api-contract.md.',
     ],
 
     'ui' => [
-        'title' => 'Karma Shop API',
+        'title' => 'Kickzers API',
     ],
 
     /*

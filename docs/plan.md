@@ -1,4 +1,4 @@
-# Karma Shop: implementation plan
+# Kickzers: implementation plan
 
 Companion to [`api-contract.md`](api-contract.md). Status: **approved 2026-10-04**.
 
@@ -100,7 +100,7 @@ component ──useXQuery() / useXMutation()──▶ queries.js ──▶ api.j
 1. Login by **email** (the Laravel users table has no username).
 2. Payment options come from `GET /payment-methods`: Cash on delivery and Check payments (PayPal removed).
 3. "Create an account?" at checkout reveals a password field; the account is created with the order.
-4. Order numbers look like `KS-2026-000001` instead of `60235`.
+4. Order numbers look like `KZ-2026-000001` instead of `60235`.
 5. Blog tag URLs use slugs (`?tag=technology`).
 6. A new `/account` page lists order history (the template has no such page; it would reuse the confirmation styles).
 
@@ -129,7 +129,7 @@ backend/app/
 │                    ProductStatus, AddressType, PromotionType, ProductSort
 ├── Exceptions/      CartException, OutOfStockException, InvalidCouponException, IdempotencyConflictException
 ├── Contracts/       PaymentGateway
-├── Services/Payments/  CashOnDeliveryGateway, PaymentGatewayRegistry
+├── Services/        MediaUrl; Payments/ CashOnDeliveryGateway, CheckPaymentGateway, PaymentGatewayRegistry
 ├── Http/
 │   ├── Controllers/Api/V1/{Catalog,Blog,Cart,Checkout,Orders,Auth,Account,Wishlist,Reviews,Comments,Contact,Newsletter}/
 │   ├── Requests/{same}/
@@ -139,11 +139,12 @@ backend/app/
 ├── Policies/        OrderPolicy, CartItemPolicy, CommentPolicy (parent check)
 ├── Repositories/
 │   ├── BaseRepository.php
-│   ├── Catalog/  ProductRepository, CategoryRepository, PromotionRepository, BannerRepository
+│   ├── Catalog/  ProductRepository, CategoryRepository, BrandRepository, ColorRepository, PromotionRepository, BannerRepository
 │   ├── Blog/     PostRepository, BlogSidebarRepository
 │   ├── Cart/     CartRepository
 │   ├── Orders/   OrderRepository
-│   └── Content/  ReviewRepository, CommentRepository, ContactMessageRepository, NewsletterRepository
+│   ├── Content/  ReviewRepository, CommentRepository, ContactMessageRepository, NewsletterRepository
+│   └── Reference/ CountryRepository
 ├── Events/          OrderPlaced, ContactMessageReceived
 ├── Listeners/       SendOrderConfirmation, NotifyAdminOfContactMessage   (queued)
 ├── Mail/            OrderConfirmationMail (markdown)
@@ -204,7 +205,7 @@ Notes:
 
 - **Rating summary** is computed with an aggregate query (`AVG`, `COUNT`, grouped by rating) on the indexed
   `reviews.product_id`. I chose this over denormalised columns that can drift; it is a single cheap query per product page.
-- **Order numbers** are `KS-{year}-{id padded to 6}`, assigned inside the PlaceOrder transaction right after insert.
+- **Order numbers** are `KZ-{year}-{id padded to 6}`, assigned inside the PlaceOrder transaction right after insert.
   Unique, readable and sortable.
 - **Images:** product, blog, banner and author images move to the backend's `public` disk (`storage/app/public`,
   served through `storage:link`). The seeder copies them from `database/seeders/assets/`. Resources return absolute

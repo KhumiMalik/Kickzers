@@ -1,10 +1,18 @@
-# Karma Shop API contract (v1)
+# Kickzers API contract (v1)
 
 This is the contract between the React frontend (`frontend/`) and the Laravel API (`backend/`).
 It replaces the mock services in `frontend/src/api/*.js`. The [mapping table](#11-mapping-from-the-current-mock-services)
 at the end links each current mock function to its endpoint.
 
 Status: **approved 2026-10-04**. Changes after approval are noted in the phase summaries.
+
+Additive changes since approval (all backwards compatible):
+
+- Phase 5: the project is named **Kickzers**; order numbers and SKUs use the `KZ-` prefix, the demo coupon is
+  `KICKZERS10` and the guest cart cookie is `kickzers_cart`.
+- Phase 6: promotion blocks (`exclusive_deal`, `deals_of_the_week`, `/promotions/deals-of-the-week`) always include
+  `title`; post links (`previous`, `next`, sidebar `popular`) all include `published_at`; the 404 from
+  `/promotions/deals-of-the-week` carries `"code": "no_active_promotion"`.
 
 ---
 
@@ -45,7 +53,7 @@ A breaking change means a new `/api/v2` prefix; additive changes (new optional f
 
 ### 1.4 Cart identification
 
-Guests are identified by an httpOnly, encrypted cookie `karma_cart` (UUID token, 30-day lifetime, `SameSite=Lax`),
+Guests are identified by an httpOnly, encrypted cookie `kickzers_cart` (UUID token, 30-day lifetime, `SameSite=Lax`),
 set by the API the first time a cart is written. Logged-in users have one cart linked to their user id.
 On login/register the guest cart is **merged** into the user's cart (quantities added, capped at stock) and the
 cookie is cleared. The frontend never sees or stores the token.
@@ -202,7 +210,7 @@ ProductSummary plus:
 
 ```json
 {
-  "sku": "KS-0001",
+  "sku": "KZ-0001",
   "short_description": "Built for everyday comfort…",
   "description": ["First paragraph…", "Second paragraph…"],
   "gallery": ["http://localhost:8000/storage/products/p1.jpg", "…"],
@@ -296,7 +304,7 @@ PostDetail adds:
       }
     ],
     "item_count": 2,
-    "coupon": { "code": "KARMA10", "description": "10% off" },
+    "coupon": { "code": "KICKZERS10", "description": "10% off" },
     "shipping_method": "flat_rate_10",
     "shipping_methods": [
       { "code": "flat_rate_5", "name": "Flat Rate", "price": 500 },
@@ -324,7 +332,7 @@ PostDetail adds:
 ```json
 {
   "data": {
-    "number": "KS-2026-000001",
+    "number": "KZ-2026-000001",
     "status": "processing",
     "status_label": "Processing",
     "placed_at": "2026-10-03T18:19:29Z",
@@ -338,7 +346,7 @@ PostDetail adds:
     "items": [
       { "product_slug": "suede-classic-low", "name": "Suede Classic Low", "unit_price": 7500, "quantity": 2, "line_total": 15000 }
     ],
-    "coupon_code": "KARMA10",
+    "coupon_code": "KICKZERS10",
     "shipping_method": { "code": "flat_rate_10", "name": "Flat Rate", "price": 1000 },
     "payment_method": { "code": "cash_on_delivery", "name": "Cash on delivery" },
     "payment_status": "unpaid",
@@ -550,7 +558,7 @@ Adding a product that is already in the cart increases its quantity. If the resu
 with 422 and the cart is unchanged.
 
 Coupon types: `percent` (value = whole percent) and `fixed` (value = minor units, capped at the subtotal). The discount
-applies to the subtotal only, not shipping. Seeded: `KARMA10` (10%) and `SAVE20` ($20.00).
+applies to the subtotal only, not shipping. Seeded: `KICKZERS10` (10%) and `SAVE20` ($20.00).
 
 Shipping: each method has a default price, and destination-specific rates may override it or make a method
 unavailable. For example, Local Delivery is only offered when the destination country is the store's country

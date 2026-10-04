@@ -55,7 +55,7 @@ final class CatalogSeeder extends Seeder
         'new-balance' => 'New Balance',
         'asics' => 'Asics',
         'converse' => 'Converse',
-        'karma' => 'Karma Basics',
+        'kickzers' => 'Kickzers Basics',
     ];
 
     /** @var array<string, string> slug => name */
@@ -106,7 +106,7 @@ final class CatalogSeeder extends Seeder
     private const array PRODUCTS = [
         ['slug' => 'aero-knit-running-shoe', 'name' => 'Aero Knit Running Shoe', 'price' => 15000, 'compare_at_price' => 21000, 'image' => 'product/p1.jpg', 'category' => 'running', 'brand' => 'adidas', 'color' => 'grey', 'published_at' => '2026-09-20 09:00:00'],
         ['slug' => 'volt-free-trainer', 'name' => 'Volt Free Trainer', 'price' => 12900, 'compare_at_price' => 16000, 'image' => 'product/p2.jpg', 'category' => 'running', 'brand' => 'nike', 'color' => 'spacegrey', 'published_at' => '2026-09-18 09:00:00'],
-        ['slug' => 'perforated-leather-slip-on', 'name' => 'Perforated Leather Slip-On', 'price' => 8900, 'compare_at_price' => null, 'image' => 'product/p3.jpg', 'category' => 'casual', 'brand' => 'karma', 'color' => 'black', 'published_at' => '2026-09-15 09:00:00'],
+        ['slug' => 'perforated-leather-slip-on', 'name' => 'Perforated Leather Slip-On', 'price' => 8900, 'compare_at_price' => null, 'image' => 'product/p3.jpg', 'category' => 'casual', 'brand' => 'kickzers', 'color' => 'black', 'published_at' => '2026-09-15 09:00:00'],
         ['slug' => 'retro-574-suede-runner', 'name' => 'Retro 574 Suede Runner', 'price' => 11000, 'compare_at_price' => 13500, 'image' => 'product/p4.jpg', 'category' => 'sneakers', 'brand' => 'new-balance', 'color' => 'gold', 'published_at' => '2026-09-12 09:00:00'],
         ['slug' => 'suede-classic-low', 'name' => 'Suede Classic Low', 'price' => 7500, 'compare_at_price' => 9500, 'image' => 'product/p5.jpg', 'category' => 'women-sneakers', 'brand' => 'puma', 'color' => 'grey', 'published_at' => '2026-09-10 09:00:00'],
         ['slug' => 'gel-blaze-running-shoe', 'name' => 'Gel Blaze Running Shoe', 'price' => 14000, 'compare_at_price' => 18000, 'image' => 'product/p6.jpg', 'category' => 'running', 'brand' => 'asics', 'color' => 'orange', 'published_at' => '2026-09-08 09:00:00'],
@@ -116,10 +116,10 @@ final class CatalogSeeder extends Seeder
         ['slug' => 'camo-compression-tee', 'name' => 'Camo Compression Tee', 'price' => 4500, 'compare_at_price' => null, 'image' => 'l2.jpg', 'category' => 'training-tops', 'brand' => 'adidas', 'color' => 'grey', 'published_at' => '2026-08-25 09:00:00'],
         ['slug' => 'away-football-jersey', 'name' => 'Away Football Jersey', 'price' => 9000, 'compare_at_price' => 11000, 'image' => 'l3.jpg', 'category' => 'jerseys', 'brand' => 'adidas', 'color' => 'black', 'published_at' => '2026-08-20 09:00:00'],
         ['slug' => 'red-training-jersey', 'name' => 'Red Training Jersey', 'price' => 6500, 'compare_at_price' => null, 'image' => 'l4.jpg', 'category' => 'jerseys', 'brand' => 'adidas', 'color' => 'red', 'published_at' => '2026-08-18 09:00:00'],
-        ['slug' => 'teal-wrap-jumpsuit', 'name' => 'Teal Wrap Jumpsuit', 'price' => 7000, 'compare_at_price' => null, 'image' => 'l5.jpg', 'category' => 'dresses', 'brand' => 'karma', 'color' => 'blue', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
-        ['slug' => 'cami-midi-dress', 'name' => 'Cami Midi Dress', 'price' => 6000, 'compare_at_price' => null, 'image' => 'l6.jpg', 'category' => 'dresses', 'brand' => 'karma', 'color' => 'spacegrey', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
-        ['slug' => 'belted-sleeveless-dress', 'name' => 'Belted Sleeveless Dress', 'price' => 7500, 'compare_at_price' => null, 'image' => 'l7.jpg', 'category' => 'dresses', 'brand' => 'karma', 'color' => 'black', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
-        ['slug' => 'gingham-check-shirt', 'name' => 'Gingham Check Shirt', 'price' => 5000, 'compare_at_price' => null, 'image' => 'l8.jpg', 'category' => 'shirts', 'brand' => 'karma', 'color' => 'red', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
+        ['slug' => 'teal-wrap-jumpsuit', 'name' => 'Teal Wrap Jumpsuit', 'price' => 7000, 'compare_at_price' => null, 'image' => 'l5.jpg', 'category' => 'dresses', 'brand' => 'kickzers', 'color' => 'blue', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
+        ['slug' => 'cami-midi-dress', 'name' => 'Cami Midi Dress', 'price' => 6000, 'compare_at_price' => null, 'image' => 'l6.jpg', 'category' => 'dresses', 'brand' => 'kickzers', 'color' => 'spacegrey', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
+        ['slug' => 'belted-sleeveless-dress', 'name' => 'Belted Sleeveless Dress', 'price' => 7500, 'compare_at_price' => null, 'image' => 'l7.jpg', 'category' => 'dresses', 'brand' => 'kickzers', 'color' => 'black', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
+        ['slug' => 'gingham-check-shirt', 'name' => 'Gingham Check Shirt', 'price' => 5000, 'compare_at_price' => null, 'image' => 'l8.jpg', 'category' => 'shirts', 'brand' => 'kickzers', 'color' => 'red', 'published_at' => '2026-10-01 09:00:00', 'coming_soon' => true],
         ['slug' => 'zoom-flight-basketball-shoe', 'name' => 'Zoom Flight Basketball Shoe', 'price' => 14999, 'compare_at_price' => 18999, 'image' => 'category/s-p1.jpg', 'category' => 'basketball', 'brand' => 'nike', 'color' => 'blue', 'published_at' => '2026-09-25 09:00:00'],
         ['slug' => 'comic-hi-top-canvas', 'name' => 'Comic Hi-Top Canvas', 'price' => 15000, 'compare_at_price' => 21000, 'image' => 'product/e-p1.png', 'category' => 'canvas', 'brand' => 'converse', 'color' => 'spacegrey', 'published_at' => '2026-09-22 09:00:00'],
     ];
@@ -190,7 +190,7 @@ final class CatalogSeeder extends Seeder
                 'color_id' => $this->colorIds[$data['color']],
                 'name' => $data['name'],
                 'slug' => $data['slug'],
-                'sku' => sprintf('KS-%04d', $number),
+                'sku' => sprintf('KZ-%04d', $number),
                 'short_description' => self::SHORT_DESCRIPTION,
                 'description' => self::DESCRIPTION,
                 'price' => $data['price'],
@@ -277,7 +277,7 @@ final class CatalogSeeder extends Seeder
             }
 
             $thread = $this->comment($product, null, 'Blake Ruiz', 'blake.ruiz@example.com', 'product/review-1.png', '2026-02-12 17:56:00');
-            $this->comment($product, $thread, 'Karma Support', 'support@example.com', 'product/review-2.png', '2026-02-12 18:30:00');
+            $this->comment($product, $thread, 'Kickzers Support', 'support@example.com', 'product/review-2.png', '2026-02-12 18:30:00');
             $this->comment($product, null, 'Sam Patel', 'sam.patel@example.com', 'product/review-3.png', '2026-03-21 11:15:00');
         }
     }

@@ -34,7 +34,7 @@ it('seeds the same catalog the frontend mock server used', function (): void {
 
     $product = Product::query()->where('slug', 'aero-knit-running-shoe')->firstOrFail();
 
-    expect($product->sku)->toBe('KS-0001')
+    expect($product->sku)->toBe('KZ-0001')
         ->and($product->price)->toBe(15000)
         ->and($product->compare_at_price)->toBe(21000)
         ->and($product->status)->toBe(ProductStatus::Active)

@@ -7,7 +7,7 @@ import { DEFAULT_SHIPPING_METHOD } from './data/reference'
  * write so a page reload behaves like a real server that remembers your cart,
  * session and orders. Static catalog data is imported directly from ./data.
  */
-const STORAGE_KEY = 'karma.mock-server.v1'
+const STORAGE_KEY = 'kickzers.mock-server.v1'
 
 export const emptyCart = () => ({
   items: [],

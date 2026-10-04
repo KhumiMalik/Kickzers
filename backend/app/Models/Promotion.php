@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ProductStatus;
 use App\Enums\PromotionType;
 use Database\Factories\PromotionFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -24,6 +25,16 @@ final class Promotion extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class)->withPivot('position')->orderByPivot('position');
+    }
+
+    /**
+     * The products the storefront shows: drafts left out, in display order.
+     *
+     * @return BelongsToMany<Product, $this>
+     */
+    public function publishedProducts(): BelongsToMany
+    {
+        return $this->products()->whereIn('products.status', ProductStatus::published());
     }
 
     /**

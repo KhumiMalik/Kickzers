@@ -51,6 +51,12 @@ final class PostBuilder extends Builder
             ->orWhereLike('excerpt', "%{$term}%"));
     }
 
+    /** Eager-loads what a post card (PostSummary) shows. */
+    public function withSummaryRelations(): self
+    {
+        return $this->with(['author', 'categories', 'tags'])->withCount('approvedComments');
+    }
+
     /** Newest first, with the primary key as a tie-breaker for stable pagination. */
     public function newestFirst(): self
     {

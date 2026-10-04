@@ -24,7 +24,7 @@ final class OrderItemFactory extends Factory
             'product_id' => Product::factory(),
             'product_name' => 'Aero Knit Running Shoe',
             'product_slug' => 'aero-knit-running-shoe',
-            'sku' => 'KS-0001',
+            'sku' => 'KZ-0001',
             'unit_price' => 5000,
             'quantity' => 2,
             'line_total' => 10000,

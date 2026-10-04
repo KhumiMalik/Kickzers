@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\ProductStatus;
 use Database\Factories\BannerFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -23,6 +24,16 @@ final class Banner extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * The product as the storefront may show it: null while it is a draft.
+     *
+     * @return BelongsTo<Product, $this>
+     */
+    public function publishedProduct(): BelongsTo
+    {
+        return $this->product()->whereIn('products.status', ProductStatus::published());
     }
 
     /** @param  Builder<self>  $query */

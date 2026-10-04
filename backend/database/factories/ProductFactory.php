@@ -32,7 +32,7 @@ final class ProductFactory extends Factory
             'color_id' => Color::factory(),
             'name' => $name,
             'slug' => Str::slug($name),
-            'sku' => fake()->unique()->bothify('KS-####-??'),
+            'sku' => fake()->unique()->bothify('KZ-####-??'),
             'short_description' => fake()->sentence(16),
             'description' => fake()->paragraph()."\n\n".fake()->paragraph(),
             'price' => fake()->numberBetween(10, 200) * 100,

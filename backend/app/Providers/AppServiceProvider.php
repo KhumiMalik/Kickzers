@@ -6,11 +6,17 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\Product;
+use App\Repositories\Blog\PostRepository;
+use App\Repositories\Catalog\ProductRepository;
+use App\Services\Payments\CashOnDeliveryGateway;
+use App\Services\Payments\CheckPaymentGateway;
+use App\Services\Payments\PaymentGatewayRegistry;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -21,7 +27,11 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // The payment methods the checkout offers, in display order.
+        $this->app->singleton(PaymentGatewayRegistry::class, fn (): PaymentGatewayRegistry => new PaymentGatewayRegistry(
+            new CashOnDeliveryGateway,
+            new CheckPaymentGateway,
+        ));
     }
 
     /**
@@ -40,7 +50,19 @@ final class AppServiceProvider extends ServiceProvider
             'post' => Post::class,
         ]);
 
+        $this->configureRouteBindings();
         $this->configureRateLimiting();
+    }
+
+    /**
+     * Storefront URLs use slugs and must never reveal drafts: {product} and
+     * {post} resolve through the repositories' "published" lookups, so an
+     * unpublished slug is a plain 404 ("Product not found.").
+     */
+    private function configureRouteBindings(): void
+    {
+        Route::bind('product', fn (string $slug): Product => $this->app->make(ProductRepository::class)->findPublishedBySlug($slug));
+        Route::bind('post', fn (string $slug): Post => $this->app->make(PostRepository::class)->findPublishedBySlug($slug));
     }
 
     /**

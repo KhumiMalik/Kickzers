@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\ProductStatus;
 use App\Models\Builders\ProductBuilder;
+use App\Models\Concerns\SplitsParagraphs;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
@@ -15,10 +16,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * A sellable product. Prices are integer minor units (cents).
+ *
+ * @property-read int $approved_comments_count only when loaded with withCount('approvedComments')
  *
  * @method static ProductBuilder query()
  */
@@ -32,6 +36,8 @@ final class Product extends Model
 {
     /** @use HasFactory<ProductFactory> */
     use HasFactory;
+
+    use SplitsParagraphs;
 
     /** Most of one product a customer may have in the cart. */
     public const int MAX_QUANTITY_PER_ORDER = 99;
@@ -60,6 +66,17 @@ final class Product extends Model
         return $this->hasMany(ProductImage::class)->orderBy('position')->orderBy('id');
     }
 
+    /**
+     * The first gallery image: what product cards show. Loading this instead of
+     * `images` keeps listings to one image row per product.
+     *
+     * @return HasOne<ProductImage, $this>
+     */
+    public function primaryImage(): HasOne
+    {
+        return $this->hasOne(ProductImage::class)->ofMany(['position' => 'min', 'id' => 'min']);
+    }
+
     /** @return HasMany<ProductSpecification, $this> */
     public function specifications(): HasMany
     {
@@ -78,6 +95,12 @@ final class Product extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    /** @return MorphMany<Comment, $this> */
+    public function approvedComments(): MorphMany
+    {
+        return $this->comments()->where('is_approved', true);
+    }
+
     /** @return BelongsToMany<Promotion, $this> */
     public function promotions(): BelongsToMany
     {
@@ -88,6 +111,12 @@ final class Product extends Model
     public function isPurchasable(): bool
     {
         return $this->status === ProductStatus::Active && $this->stock_quantity > 0;
+    }
+
+    /** @return list<string> */
+    public function descriptionParagraphs(): array
+    {
+        return $this->splitParagraphs($this->description);
     }
 
     /** Upper bound for the quantity stepper: stock, capped per order. */

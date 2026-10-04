@@ -7,7 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Server-owned carts. A guest cart is found by `token` (from the karma_cart
+ * Server-owned carts. A guest cart is found by `token` (from the kickzers_cart
  * cookie), a user's cart by `user_id`; each user has at most one cart.
  */
 return new class extends Migration

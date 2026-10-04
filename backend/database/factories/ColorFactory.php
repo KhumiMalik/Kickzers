@@ -18,7 +18,8 @@ final class ColorFactory extends Factory
      */
     public function definition(): array
     {
-        $name = Str::title(fake()->unique()->safeColorName());
+        // colorName() has ~140 values; safeColorName() only 17, too few for tests that create many products.
+        $name = Str::title(fake()->unique()->colorName());
 
         return ['name' => $name, 'slug' => Str::slug($name), 'hex' => fake()->hexColor()];
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Builders\PostBuilder;
+use App\Models\Concerns\SplitsParagraphs;
 use Database\Factories\PostFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\RouteKey;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
  * A blog post. `body` and `closing` hold paragraphs separated by blank lines;
  * image paths are relative to the "public" storage disk.
  *
+ * @property-read int $approved_comments_count only when loaded with withCount('approvedComments')
+ *
  * @method static PostBuilder query()
  */
 #[Fillable([
@@ -31,6 +34,20 @@ final class Post extends Model
 {
     /** @use HasFactory<PostFactory> */
     use HasFactory;
+
+    use SplitsParagraphs;
+
+    /** @return list<string> */
+    public function bodyParagraphs(): array
+    {
+        return $this->splitParagraphs($this->body);
+    }
+
+    /** @return list<string> */
+    public function closingParagraphs(): array
+    {
+        return $this->splitParagraphs($this->closing);
+    }
 
     /** @return BelongsTo<BlogAuthor, $this> */
     public function author(): BelongsTo
@@ -54,6 +71,12 @@ final class Post extends Model
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    /** @return MorphMany<Comment, $this> */
+    public function approvedComments(): MorphMany
+    {
+        return $this->comments()->where('is_approved', true);
     }
 
     /**

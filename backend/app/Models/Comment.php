@@ -47,6 +47,12 @@ final class Comment extends Model
         return $this->hasMany(self::class, 'parent_id')->oldest()->orderBy('id');
     }
 
+    /** @return HasMany<self, $this> */
+    public function approvedReplies(): HasMany
+    {
+        return $this->replies()->where('is_approved', true);
+    }
+
     /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {

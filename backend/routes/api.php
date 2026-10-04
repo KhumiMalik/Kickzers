@@ -2,7 +2,19 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\Blog\BlogSidebarController;
+use App\Http\Controllers\Api\V1\Blog\PostController;
+use App\Http\Controllers\Api\V1\Cart\CountryController;
+use App\Http\Controllers\Api\V1\Catalog\CatalogFilterController;
+use App\Http\Controllers\Api\V1\Catalog\DealsOfTheWeekController;
+use App\Http\Controllers\Api\V1\Catalog\HomeController;
+use App\Http\Controllers\Api\V1\Catalog\ProductController;
+use App\Http\Controllers\Api\V1\Catalog\RelatedProductController;
+use App\Http\Controllers\Api\V1\Checkout\PaymentMethodController;
+use App\Http\Controllers\Api\V1\Comments\PostCommentController;
+use App\Http\Controllers\Api\V1\Comments\ProductCommentController;
 use App\Http\Controllers\Api\V1\HealthController;
+use App\Http\Controllers\Api\V1\Reviews\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,9 +23,33 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | A breaking change gets a new /api/v2 group; additive changes stay in v1.
+| {product} and {post} are slugs resolved to published records only
+| (AppServiceProvider::configureRouteBindings).
 |
 */
 
 Route::prefix('v1')->name('api.v1.')->group(function (): void {
     Route::get('health', HealthController::class)->name('health');
+
+    // Catalog (§5)
+    Route::get('home', HomeController::class)->name('home');
+    Route::get('catalog/filters', CatalogFilterController::class)->name('catalog.filters');
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('products/{product}/related', RelatedProductController::class)->name('products.related');
+    Route::get('promotions/deals-of-the-week', DealsOfTheWeekController::class)->name('promotions.deals-of-the-week');
+
+    // Reviews and comments: reads (§6)
+    Route::get('products/{product}/reviews', [ProductReviewController::class, 'index'])->name('products.reviews.index');
+    Route::get('products/{product}/comments', [ProductCommentController::class, 'index'])->name('products.comments.index');
+    Route::get('posts/{post}/comments', [PostCommentController::class, 'index'])->name('posts.comments.index');
+
+    // Blog (§7)
+    Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('blog/sidebar', BlogSidebarController::class)->name('blog.sidebar');
+
+    // Reference data (§9, §10)
+    Route::get('countries', CountryController::class)->name('countries.index');
+    Route::get('payment-methods', PaymentMethodController::class)->name('payment-methods.index');
 });

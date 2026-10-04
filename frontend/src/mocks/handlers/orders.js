@@ -109,7 +109,7 @@ export function placeOrder({ body, headers }) {
   const sequence = nextId('order')
   const billing = address(body.billing, true)
   const order = {
-    number: `KS-${new Date().getFullYear()}-${String(sequence).padStart(6, '0')}`,
+    number: `KZ-${new Date().getFullYear()}-${String(sequence).padStart(6, '0')}`,
     idempotency_key: key,
     user_id: user?.id ?? null,
     status: 'processing',

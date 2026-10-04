@@ -1,6 +1,6 @@
-# Karma Shop — React frontend
+# Kickzers — React frontend
 
-React 19 + Vite port of the Colorlib **Karma** e-commerce template (`../template`, kept untouched as a reference).
+Storefront for **Kickzers**: a React 19 + Vite port of the Colorlib "Karma" e-commerce template (`../template`, kept untouched as a reference).
 The Laravel API lives in `../backend`; the contract between them is [`../docs/api-contract.md`](../docs/api-contract.md).
 
 ```bash
@@ -71,9 +71,9 @@ Other conventions:
 Until the Laravel API is connected, `VITE_USE_MOCKS=true` routes every request to `src/mocks/server.js`, which
 answers in exactly the contract's wire format (snake_case, minor units, `{ data }` envelopes, 401/404/422 errors) and
 implements the server-side rules (totals, coupons, stock, shipping by destination, idempotent checkout, sessions).
-Its state is kept in `localStorage` (`karma.mock-server.v1`) so reloads behave like a real server.
+Its state is kept in `localStorage` (`kickzers.mock-server.v1`) so reloads behave like a real server.
 
-Demo data: coupons `KARMA10` (10%) and `SAVE20` ($20); login accepts any username with a 6+ character password.
+Demo data: coupons `KICKZERS10` (10%) and `SAVE20` ($20); login accepts any username with a 6+ character password.
 
 ## Template notes
 

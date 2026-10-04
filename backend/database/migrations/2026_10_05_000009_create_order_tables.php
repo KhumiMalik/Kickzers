@@ -17,7 +17,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table): void {
             $table->id();
-            // "KS-2026-000001"; assigned right after insert, inside the PlaceOrder transaction.
+            // "KZ-2026-000001"; assigned right after insert, inside the PlaceOrder transaction.
             $table->string('number', 30)->nullable()->unique();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             // Client-generated key that makes checkout retries return the same order.

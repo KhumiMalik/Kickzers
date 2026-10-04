@@ -11,7 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/** Two-level product category tree ("Men's Shoes" › "Running"). */
+/**
+ * Two-level product category tree ("Men's Shoes" › "Running").
+ *
+ * @property-read int $products_count only when loaded with withCount('products')
+ */
 #[Fillable(['parent_id', 'name', 'slug', 'position'])]
 final class Category extends Model
 {

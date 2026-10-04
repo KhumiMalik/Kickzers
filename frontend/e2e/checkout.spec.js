@@ -17,13 +17,13 @@ test.describe('Checkout, confirmation and tracking', () => {
   test('places an order with the correct totals, then tracks it', async ({ page }) => {
     const email = uniqueEmail()
 
-    // 2 × $75 + 3 × $150 = $600, KARMA10 = -$60, Flat Rate $10 → $550
+    // 2 × $75 + 3 × $150 = $600, KICKZERS10 = -$60, Flat Rate $10 → $550
     await addFromProductPage(page, 'suede-classic-low', 2)
     await addFromProductPage(page, 'aero-knit-running-shoe', 3)
     await page.goto('/cart')
-    await page.getByPlaceholder('Coupon Code').fill('KARMA10')
+    await page.getByPlaceholder('Coupon Code').fill('KICKZERS10')
     await page.getByRole('button', { name: 'Apply' }).click()
-    await expect(page.locator('.coupon-note')).toContainText('KARMA10')
+    await expect(page.locator('.coupon-note')).toContainText('KICKZERS10')
     await page.getByRole('link', { name: 'Flat Rate: $10.00' }).click()
     await page.getByRole('link', { name: 'Proceed to checkout' }).click()
 

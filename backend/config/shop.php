@@ -9,7 +9,7 @@ return [
     | Storefront
     |--------------------------------------------------------------------------
     |
-    | Settings of the Karma Shop domain. Application code reads these with
+    | Settings of the Kickzers domain. Application code reads these with
     | config('shop.*'); never call env() outside the config directory.
     |
     */
