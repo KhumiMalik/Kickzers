@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-// Exercise the real-network code path (not the mock server).
 vi.mock('../config/env', () => ({
-  env: { apiUrl: 'http://api.test/api/v1', apiOrigin: 'http://api.test', useMocks: false },
+  env: { apiUrl: 'http://api.test/api/v1', apiOrigin: 'http://api.test' },
 }))
 
 const { ApiError, apiClient } = await import('./api-client')

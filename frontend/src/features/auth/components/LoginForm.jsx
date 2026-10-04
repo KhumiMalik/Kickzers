@@ -30,9 +30,10 @@ export default function LoginForm({ onSuccess }) {
       <form className="row login_form" noValidate onSubmit={onSubmit}>
         <TextField
           wrapperClassName="col-md-12 form-group"
-          type="text"
-          placeholder="Username"
-          autoComplete="username"
+          type="email"
+          placeholder="Email Address"
+          aria-label="Email Address"
+          autoComplete="email"
           error={errors.email}
           {...register('email')}
         />

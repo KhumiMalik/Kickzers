@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { accountKeys } from '../account'
 import { authKeys } from '../auth'
 import { cartKeys } from '../cart'
 import { orderKeys } from '../orders'
@@ -13,8 +14,8 @@ export const usePaymentMethods = () =>
 
 /**
  * Places the order. The server empties the cart (and may create + log in an
- * account), so those caches are refreshed; the order is cached for the
- * confirmation page.
+ * account), so those caches and the order history are refreshed; the order is
+ * cached for the confirmation page.
  */
 export function usePlaceOrder() {
   const queryClient = useQueryClient()
@@ -25,6 +26,7 @@ export function usePlaceOrder() {
       return Promise.all([
         queryClient.invalidateQueries({ queryKey: cartKeys.cart }),
         queryClient.invalidateQueries({ queryKey: authKeys.user }),
+        queryClient.invalidateQueries({ queryKey: accountKeys.all }),
       ])
     },
   })

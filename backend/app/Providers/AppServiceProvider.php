@@ -70,6 +70,15 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function configureRateLimiting(): void
     {
+        // Only the end-to-end test server switches limits off (SHOP_RATE_LIMITING=false).
+        if (! config()->boolean('shop.rate_limiting')) {
+            foreach (['api', 'auth', 'checkout', 'tracking', 'submissions'] as $limiter) {
+                RateLimiter::for($limiter, fn (): Limit => Limit::none());
+            }
+
+            return;
+        }
+
         RateLimiter::for('api', fn (Request $request): Limit => Limit::perMinute(120)
             ->by($request->user()?->getAuthIdentifier() ?? $request->ip()));
 

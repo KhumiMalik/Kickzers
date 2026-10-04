@@ -7,11 +7,6 @@ import { z } from 'zod'
  */
 const envSchema = z.object({
   VITE_API_URL: z.url().default('http://localhost:8000/api/v1'),
-  // 'true' until the Laravel API is connected (Phase 11): requests are answered by src/mocks.
-  VITE_USE_MOCKS: z
-    .enum(['true', 'false'])
-    .default('true')
-    .transform((value) => value === 'true'),
 })
 
 const parsed = envSchema.parse(import.meta.env)
@@ -21,5 +16,4 @@ export const env = {
   apiUrl: parsed.VITE_API_URL.replace(/\/$/, ''),
   /** Origin of the API server, used for Sanctum's /sanctum/csrf-cookie endpoint. */
   apiOrigin: new URL(parsed.VITE_API_URL).origin,
-  useMocks: parsed.VITE_USE_MOCKS,
 }

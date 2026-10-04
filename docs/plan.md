@@ -50,8 +50,7 @@ frontend/
 │   │   ├── query-client.js      # QueryClient defaults (staleTime, retry rules: no retry on 4xx)
 │   │   ├── money.js             # formatMoney(minor, currency), dollarsToMinor() for the price-filter URL
 │   │   └── dates.js             # formatShortDate, formatDateTime, timeAgo
-│   ├── config/env.js            # Zod-validated import.meta.env (VITE_API_URL, VITE_USE_MOCKS until Phase 11)
-│   ├── mocks/                   # Phase 3 only: the current mock services, moved here, then deleted in Phase 11
+│   ├── config/env.js            # Zod-validated import.meta.env (VITE_API_URL)
 │   └── styles/
 ```
 
@@ -156,7 +155,8 @@ backend/app/
 └── Providers/       AppServiceProvider (strict mode, morph map, gateway binding, rate limiters)
 routes/api.php       Route::prefix('v1')->name('api.v1.')…
 tests/Feature/{Catalog,Blog,Cart,Checkout,Orders,Auth,Account,Wishlist,Reviews,Comments,Contact,Newsletter}/
-tests/Unit/{Actions,Enums,Builders}/
+tests/Unit/            Enums, ArchitectureTest (plain PHP)
+tests/Feature/Actions/  Action tests (they need the database, so they run with the app booted)
 ```
 
 How a request flows:
@@ -295,7 +295,10 @@ React 19, I'll stop and tell you rather than downgrade silently.
 | Static | ESLint, Prettier, Pint, Larastan | | every phase |
 
 E2E against the real backend (Phase 11):
-- Playwright's `webServer` starts `php artisan serve` against a separate `database/e2e.sqlite` and the Vite dev server.
+- Playwright's `webServer` starts its own stack on dedicated ports (API :8010, Vite :5180), so it never reuses the
+  development servers or MySQL: PHP's built-in server with Laravel's router script and OPcache (without OPcache each
+  request took ~0.5 s and the browser tests timed out), a separate `database/e2e.sqlite`, `QUEUE_CONNECTION=sync`,
+  `MAIL_MAILER=array` and `SHOP_RATE_LIMITING=false` (tests submit forms from one IP faster than a person). *(Phase 11)*
 - `globalSetup` runs `migrate:fresh --seed`, so every run starts from the same seeded data.
 - Tests that place orders use unique emails.
 

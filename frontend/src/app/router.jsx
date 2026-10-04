@@ -24,6 +24,7 @@ export const router = createBrowserRouter([
       { path: '/checkout', lazy: page(() => import('../pages/Checkout')) },
       { path: '/confirmation', lazy: page(() => import('../pages/Confirmation')) },
       { path: '/login', lazy: page(() => import('../pages/Login')) },
+      { path: '/account', lazy: page(() => import('../pages/Account')) },
       { path: '/tracking', lazy: page(() => import('../pages/Tracking')) },
       { path: '/blog', lazy: page(() => import('../pages/Blog')) },
       { path: '/blog/:slug', lazy: page(() => import('../pages/BlogPost')) },

@@ -22,7 +22,6 @@ const elements = [
   { type: 'hooks', pattern: 'src/hooks' },
   { type: 'lib', pattern: 'src/lib' },
   { type: 'config', pattern: 'src/config' },
-  { type: 'mocks', pattern: 'src/mocks' },
   { type: 'test', pattern: 'src/test' },
 ]
 
@@ -49,10 +48,13 @@ const boundaryPolicies = [
   },
   { from: { element: { type: 'ui' } }, allow: to('ui', 'hooks', 'lib') },
   { from: { element: { type: 'hooks' } }, allow: to('hooks', 'lib') },
-  // lib → mocks only for the dynamic import of the mock server (removed in Phase 11).
-  { from: { element: { type: 'lib' } }, allow: to('lib', 'config', 'mocks') },
+  { from: { element: { type: 'lib' } }, allow: to('lib', 'config') },
   { from: { element: { type: 'config' } }, allow: to('config') },
-  { from: { element: { type: 'mocks' } }, allow: to('mocks', 'lib') },
+  // Test helpers (renderWithProviders, the fake API) wrap components in the app's providers.
+  {
+    from: { element: { type: 'test' } },
+    allow: [to('test', 'ui', 'layout', 'hooks', 'lib', 'config'), featurePublicApi],
+  },
 ]
 
 export default [

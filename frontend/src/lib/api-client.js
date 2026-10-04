@@ -75,12 +75,6 @@ async function sendOverNetwork({ method, url, body, headers }) {
   return { status: response.status, body: text ? JSON.parse(text) : null }
 }
 
-async function sendToMockServer({ method, path, query, body, headers }) {
-  // Loaded on demand so the mock server never ships when VITE_USE_MOCKS=false.
-  const { handleRequest } = await import('../mocks/server')
-  return handleRequest({ method, path, query, body, headers })
-}
-
 function toApiError(status, body) {
   const errors = Object.fromEntries(
     Object.entries(body?.errors ?? {}).map(([field, messages]) => [pathToCamel(field), messages[0]]),
@@ -107,9 +101,7 @@ export async function request(method, path, { params, body, headers } = {}) {
 
   let result
   try {
-    result = env.useMocks
-      ? await sendToMockServer({ method, path, query, body: wireBody, headers })
-      : await sendOverNetwork({ method, url: `${env.apiUrl}${path}${query}`, body: wireBody, headers })
+    result = await sendOverNetwork({ method, url: `${env.apiUrl}${path}${query}`, body: wireBody, headers })
   } catch (error) {
     if (error instanceof ApiError) throw error
     throw new ApiError({ status: 0, message: 'Network error. Please check your connection and try again.' })

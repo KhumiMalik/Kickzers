@@ -46,14 +46,20 @@ export default function Header() {
   }
 
   const renderChild = (child) => {
+    // Logged in: "Login" becomes "My Account" and "Logout".
     if (child.to === '/login' && user) {
-      return (
+      return [
+        <li key="account" className={cx('nav-item', pathname === '/account' && 'active')}>
+          <Link className="nav-link" to="/account">
+            My Account
+          </Link>
+        </li>,
         <li key="logout" className="nav-item">
           <a href="#logout" className="nav-link" onClick={(e) => (e.preventDefault(), logout.mutate())}>
             Logout ({user.name})
           </a>
-        </li>
-      )
+        </li>,
+      ]
     }
     return (
       <li key={child.to} className={cx('nav-item', pathname === child.to && 'active')}>

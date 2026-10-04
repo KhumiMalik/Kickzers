@@ -11,8 +11,8 @@ export const money = z.number().int()
 /** ISO 8601 date-time string, e.g. "2026-10-03T18:19:29Z". */
 export const isoDateTime = z.iso.datetime({ offset: true })
 
-/** Absolute URL from the API, or a root-relative path while on mocks. */
-export const imageUrl = z.string().min(1)
+/** Absolute image URL from the API (files on the backend's public disk). */
+export const imageUrl = z.url()
 
 export const slugName = z.object({ slug: z.string(), name: z.string() })
 

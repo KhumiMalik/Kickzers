@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Product;
+use App\Providers\AppServiceProvider;
 use Illuminate\Support\Facades\Queue;
 
 /*
@@ -41,6 +42,15 @@ it('allows at most fifty submissions a day per IP', function (): void {
     $this->travel(61)->seconds();
 
     $this->postJson(route('api.v1.newsletter'), ['email' => 'reader51@example.com'])->assertTooManyRequests();
+});
+
+it('can be switched off for the end-to-end test server only', function (): void {
+    config(['shop.rate_limiting' => false]);
+    (new AppServiceProvider($this->app))->boot();
+
+    foreach (range(1, 8) as $attempt) {
+        $this->postJson(route('api.v1.newsletter'), ['email' => "reader{$attempt}@example.com"])->assertAccepted();
+    }
 });
 
 it('counts each IP separately', function (): void {

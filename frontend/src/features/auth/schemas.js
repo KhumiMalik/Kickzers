@@ -9,12 +9,9 @@ export const userSchema = z.object({
   createdAt: isoDateTime,
 })
 
-/**
- * The field is sent as `email` (API contract §3). Until the backend exists the
- * template's "Username" label is kept; Phase 11 switches the UI to "Email Address".
- */
+/** Customers log in with their e-mail address (decision Q4; the template said "Username"). */
 export const loginFormSchema = z.object({
-  email: requiredText('Username'),
+  email: requiredEmail('Email address'),
   password: requiredText('Password'),
   remember: z.boolean(),
 })

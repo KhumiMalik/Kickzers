@@ -55,6 +55,7 @@ test.describe('Checkout, confirmation and tracking', () => {
     await page.getByPlaceholder('Billing Email Address').fill(email)
     await page.getByRole('button', { name: 'Track Order' }).click()
     await expect(page.locator('.tracking-result')).toContainText(`Order #${orderNumber}`)
-    await expect(page.locator('.tracking-result')).toContainText('Processing')
+    // Check payments wait for the check to clear, so the order starts as Pending.
+    await expect(page.locator('.tracking-result')).toContainText('Pending')
   })
 })

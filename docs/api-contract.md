@@ -29,6 +29,9 @@ Additive changes since approval (all backwards compatible):
   `MAIL_ADMIN_ADDRESS`), with the visitor as reply-to. Rating errors say "Please choose a rating from 1 to 5."; an
   invalid `parent_id` says "You can only reply to a top-level comment on this page." (a reply, another page's comment
   and an unpublished comment are all invalid parents). Re-subscribing an unsubscribed address re-activates it.
+- Phase 11: the frontend calls this API directly; the in-browser mock server was removed. Login uses the e-mail
+  address (the template's "Username" field became "Email Address"). New frontend page `/account` uses
+  `GET /account/orders`. `SHOP_RATE_LIMITING=false` switches the limiters of §1.9 off; only the e2e test server sets it.
 
 ---
 
