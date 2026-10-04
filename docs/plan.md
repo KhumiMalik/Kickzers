@@ -209,6 +209,10 @@ Notes:
 - **Images:** product, blog, banner and author images move to the backend's `public` disk (`storage/app/public`,
   served through `storage:link`). The seeder copies them from `database/seeders/assets/`. Resources return absolute
   URLs. Purely decorative template images (banner backgrounds, icons, logos, instagram strip) stay in `frontend/public`.
+- **Databases:** local development uses MySQL (database `kickzers`, set in `.env`). Pest runs on in-memory SQLite
+  (`phpunit.xml`), so tests are fast and never touch development data. Migrations are checked on both, including a
+  full rollback (`migrate:reset`). Seeders: `ReferenceDataSeeder` (countries, shipping rates, coupons) is idempotent
+  and runs everywhere; the demo catalog, blog, images and `jane@example.com` / `password` are skipped in production.
 - **Static marketing copy** (navigation, features strip, footer text, contact details, home category mosaic, brand
   logos) is site configuration, not mock data, so it stays in `frontend/src/config/site.js`.
 

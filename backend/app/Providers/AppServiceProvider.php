@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Post;
+use App\Models\Product;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +32,13 @@ final class AppServiceProvider extends ServiceProvider
         // Outside production, fail loudly on lazy loading (N+1), silently discarded
         // attributes and access to missing attributes.
         Model::shouldBeStrict(! $this->app->isProduction());
+
+        // Polymorphic relations store these short names instead of PHP class names, so
+        // renaming a class never breaks existing rows (comments.commentable_type).
+        Relation::enforceMorphMap([
+            'product' => Product::class,
+            'post' => Post::class,
+        ]);
 
         $this->configureRateLimiting();
     }

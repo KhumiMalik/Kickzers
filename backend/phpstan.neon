@@ -10,3 +10,6 @@ parameters:
         - database/
         - routes/
     tmpDir: storage/framework/cache/phpstan
+    # Read model casts from the casts() method body, so enum/date/int casts are
+    # known to the analyser (otherwise every cast column is typed as its raw DB type).
+    parseModelCastsMethod: true
